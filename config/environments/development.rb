@@ -41,4 +41,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # fix console output when running in VMs
+  class Application < Rails::Application
+    config.web_console.whitelisted_ips = '0.0.0.0/0'
+  end
 end
