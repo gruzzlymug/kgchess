@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'static_pages/index'
+  get 'static_pages/about'
 
   devise_for :players
   # The priority is based upon order of creation: first created -> highest priority.
