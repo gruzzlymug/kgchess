@@ -7,6 +7,39 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <%= link_to 'Chess', static_pages_index_path, class: 'navbar-brand' %>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <% if player_signed_in? %>
+          <li><%= link_to 'Create Game', new_game_path %></li>
+          <% end %>
+          <li><%= link_to 'About', static_pages_about_path %></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <% if player_signed_in? %>
+          <li><p class="navbar-text">Playing as <strong><%=current_player.email %></strong></p></li>
+          <li><%= link_to 'Sign Out', destroy_player_session_path, method: :delete %></li>
+          <% else %>
+          <li class="active"><%= link_to 'Sign Up', new_player_registration_path %> <span class="sr-only">(current)</span></a></li>
+          <li><%= link_to 'Sign In', new_player_session_path %></li>
+          <% end %>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
 <% unless notice.nil? %>
   <p class="notice"><%= notice %></p>
@@ -14,32 +47,6 @@
 <% unless alert.nil? %>
   <p class="alert"><%= alert %></p>
 <% end %>
-
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="<%= static_pages_index_path %>">Chess</a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a href="<%= static_pages_about_path %>">About</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a href="<%= new_player_registration_path %>">Sign Up <span class="sr-only">(current)</span></a></li>
-        <li><a href="<%= new_player_session_path %>">Sign In</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
 
 <%= yield %>
 
