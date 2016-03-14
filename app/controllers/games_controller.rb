@@ -9,6 +9,8 @@ class GamesController < ApplicationController
     game = Game.create(game_params)
     game.white_player_id = current_player.id
     game.save
+
+    redirect_to static_pages_index_path
   end
 
   private

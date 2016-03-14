@@ -1,2 +1,17 @@
 <h1>Home</h1>
-<p>Find me in app/views/static_pages/index.html.erb</p>
+<% if player_signed_in? %>
+<div>
+  <div>
+    <strong>White Games</strong><br>
+  <% @white_games.each do |game| %>
+    <%= game.name %><br>
+  <% end %>
+  </div>
+  <div>
+    <strong>Black Games</strong><br>
+  <% @black_games.each do |game| %>
+    <%= game.name %><br>
+  <% end %>
+  </div>
+</div>
+<% end %>
