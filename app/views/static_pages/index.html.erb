@@ -2,16 +2,13 @@
 <% if player_signed_in? %>
 <div>
   <div>
-    <strong>White Games</strong><br>
-  <% @white_games.each do |game| %>
-    <%= game.name %><br>
-  <% end %>
+    <strong>Targeted Content</strong><br>
   </div>
+</div>
+<% else %>
+<div>
   <div>
-    <strong>Black Games</strong><br>
-  <% @black_games.each do |game| %>
-    <%= game.name %><br>
-  <% end %>
+    <strong>Generic Content</strong><br>
   </div>
 </div>
 <% end %>
