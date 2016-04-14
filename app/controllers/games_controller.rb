@@ -1,6 +1,13 @@
 class GamesController < ApplicationController
   before_action :authenticate_player!
 
+  def index
+    if player_signed_in?
+      @white_games = current_player.white_games
+      @black_games = current_player.black_games
+    end
+  end
+
   def new
     @game = Game.new
   end
