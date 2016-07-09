@@ -12,4 +12,10 @@
     <%= game.name %><br>
   <% end %>
   </div>
+  <div>
+    <strong>Open Games</strong><br>
+  <% @open_games.each do |game| %>
+    <%= game.name %><br>
+  <% end %>
+  </div>
 </div>
