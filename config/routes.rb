@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   get 'static_pages/goodbye'
 
   devise_for :players
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+  # The priority is based upon order of creation:
+  #   first created -> highest priority.
 
   # You can have the root of your site routed with "root"
   root 'static_pages#index'
@@ -16,8 +16,7 @@ Rails.application.routes.draw do
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-    resources :games
+  resources :games
 
   # Example resource route with options:
   #   resources :products do

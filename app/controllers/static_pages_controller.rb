@@ -1,3 +1,4 @@
+# This controller provides access to static pages.
 class StaticPagesController < ApplicationController
   def index
   end
