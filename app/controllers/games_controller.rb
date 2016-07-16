@@ -19,11 +19,15 @@ class GamesController < ApplicationController
     game.white_player_id = current_player.id
     game.save
 
-    redirect_to static_pages_index_path
+    redirect_to games_path
   end
 
   def show
     @game = Game.find(params[:id])
+  end
+
+  def update
+    redirect_to game_path
   end
 
   private

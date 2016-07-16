@@ -6,3 +6,6 @@
 <% if @game.black_player_id %>
 <div>Black player: <%= @game.black_player.email %></div>
 <% end %>
+<% if @game.joinable?(current_player.id) %>
+<%= button_to 'Join Game', game_path, method: 'patch' %>
+<% end %>
