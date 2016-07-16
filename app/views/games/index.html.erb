@@ -1,15 +1,21 @@
-<h1>Games Index</h1>
+<h1>Games</h1>
 <div>
   <div>
     <strong>White Games</strong><br>
   <% @white_games.each do |game| %>
-    <%= game.name %><br>
+    <%= link_to game.name, game_path(game) %><br>
   <% end %>
   </div>
   <div>
     <strong>Black Games</strong><br>
   <% @black_games.each do |game| %>
-    <%= game.name %><br>
+    <%= link_to game.name, game_path(game) %><br>
+  <% end %>
+  </div>
+  <div>
+    <strong>Open Games</strong><br>
+  <% @open_games.each do |game| %>
+    <%= link_to game.name, game_path(game) %><br>
   <% end %>
   </div>
 </div>

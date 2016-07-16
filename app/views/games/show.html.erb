@@ -1,0 +1,8 @@
+<h1>Game Show Page</h1>
+<%= @game.name %>
+<% if @game.white_player_id %>
+<div>White player: <%= @game.white_player.email %></div>
+<% end %>
+<% if @game.black_player_id %>
+<div>Black player: <%= @game.black_player.email %></div>
+<% end %>

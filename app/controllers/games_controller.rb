@@ -5,6 +5,7 @@ class GamesController < ApplicationController
     if player_signed_in?
       @white_games = current_player.white_games
       @black_games = current_player.black_games
+      @open_games = open_games
     end
   end
 
@@ -20,7 +21,18 @@ class GamesController < ApplicationController
     redirect_to static_pages_index_path
   end
 
+  def show
+    @game = Game.find(params[:id])
+  end
+
   private
+
+  def open_games
+    t = Game.arel_table
+    games = Game.where(t[:white_player_id].eq(nil).or(t[:black_player_id].eq(nil)))
+    games = games.reject { |g| g.white_player_id == current_player.id }
+    games.reject { |g| g.black_player_id == current_player.id }
+  end
 
   def game_params
     params.require(:game).permit(:name)
