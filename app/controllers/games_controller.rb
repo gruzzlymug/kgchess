@@ -1,3 +1,4 @@
+# Controller for the Game model. Standard Rails stuff.
 class GamesController < ApplicationController
   before_action :authenticate_player!
 
@@ -5,7 +6,7 @@ class GamesController < ApplicationController
     if player_signed_in?
       @white_games = current_player.white_games
       @black_games = current_player.black_games
-      @open_games = open_games
+      @open_games = Game.available_to_join(current_player.id)
     end
   end
 
@@ -26,13 +27,6 @@ class GamesController < ApplicationController
   end
 
   private
-
-  def open_games
-    t = Game.arel_table
-    games = Game.where(t[:white_player_id].eq(nil).or(t[:black_player_id].eq(nil)))
-    games = games.reject { |g| g.white_player_id == current_player.id }
-    games.reject { |g| g.black_player_id == current_player.id }
-  end
 
   def game_params
     params.require(:game).permit(:name)

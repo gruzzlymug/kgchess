@@ -1,0 +1,9 @@
+Metrics/LineLength:
+  Max: 80
+
+AllCops:
+  Exclude:
+    - bin/*
+    - config/initializers/devise.rb
+    - db/migrate/*
+    - db/schema.rb
