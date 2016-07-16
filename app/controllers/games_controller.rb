@@ -21,6 +21,10 @@ class GamesController < ApplicationController
     redirect_to static_pages_index_path
   end
 
+  def show
+    @game = Game.find(params[:id])
+  end
+
   private
 
   def open_games
