@@ -7,3 +7,4 @@ AllCops:
     - config/initializers/devise.rb
     - db/migrate/*
     - db/schema.rb
+    - db/seeds.rb

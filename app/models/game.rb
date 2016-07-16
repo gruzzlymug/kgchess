@@ -23,4 +23,10 @@ class Game < ActiveRecord::Base
     return [] unless black_player
     pieces.where(player_id: black_player.id)
   end
+
+  def joinable?(player_id)
+    not_playing = player_id != white_player_id && player_id != black_player_id
+    has_open_slot = !white_player_id || !black_player_id
+    not_playing && has_open_slot
+  end
 end
