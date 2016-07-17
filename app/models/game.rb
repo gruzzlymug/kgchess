@@ -32,6 +32,6 @@ class Game < ActiveRecord::Base
 
   def join(player_id)
     # NOTE assumes always joining as black for now
-    update_attributes({ black_player_id: player_id }) unless black_player_id
+    update_attributes(black_player_id: player_id) unless black_player_id
   end
 end
