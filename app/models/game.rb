@@ -29,4 +29,9 @@ class Game < ActiveRecord::Base
     has_open_slot = !white_player_id || !black_player_id
     not_playing && has_open_slot
   end
+
+  def join(player_id)
+    # NOTE assumes always joining as black for now
+    update_attributes({ black_player_id: player_id }) unless black_player_id
+  end
 end

@@ -27,6 +27,18 @@ class GamesController < ApplicationController
   end
 
   def update
+    game = Game.find(params[:id])
+    # TODO this is a temporary construction
+    # longer term this should be an agnostic method called by a client that
+    # can layer on semantics and act accordingly on success (or failure).
+    cmd = params[:cmd]
+    case cmd
+      when 'join'
+        player_id = current_player.id
+        if game.join(player_id)
+        else
+        end
+    end
     redirect_to game_path
   end
 

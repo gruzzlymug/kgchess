@@ -1,5 +1,5 @@
-<h1>Game Show Page</h1>
-<%= @game.name %>
+<h1>Game Details</h1>
+<h3><%= @game.name %></h3>
 <% if @game.white_player_id %>
 <div>White player: <%= @game.white_player.email %></div>
 <% end %>
@@ -7,5 +7,5 @@
 <div>Black player: <%= @game.black_player.email %></div>
 <% end %>
 <% if @game.joinable?(current_player.id) %>
-<%= button_to 'Join Game', game_path, method: 'patch' %>
+<%= button_to 'Join Game', game_path, method: 'patch', params: { cmd: 'join' } %>
 <% end %>
