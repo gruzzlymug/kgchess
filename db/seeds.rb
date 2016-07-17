@@ -7,3 +7,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Player.create_with(password: 'testtest', password_confirmation: 'testtest').find_or_create_by(email: 'test@test.com')
+Player.create_with(password: 'testtest', password_confirmation: 'testtest').find_or_create_by(email: 'test2@test.com')

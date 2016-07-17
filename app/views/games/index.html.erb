@@ -18,4 +18,7 @@
     <%= link_to game.name, game_path(game) %><br>
   <% end %>
   </div>
+  <div>
+    <%= button_to 'New Game', new_game_path, method: 'get' %>
+  </div>
 </div>

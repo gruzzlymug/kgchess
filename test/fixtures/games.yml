@@ -1,17 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  white_player_id: 1
-  black_player_id: 1
-  name: MyString
+game_one:
+  white_player_id:
+  black_player_id:
+  name: 'Game One'
   status: MyString
-  turn: 1
-  winner_id: 1
+  turn:
+  winner_id:
 
-two:
+game_two:
   white_player_id: 1
   black_player_id: 1
-  name: MyString
+  name: 'Game Two'
   status: MyString
   turn: 1
-  winner_id: 1
+  winner_id:

@@ -19,11 +19,27 @@ class GamesController < ApplicationController
     game.white_player_id = current_player.id
     game.save
 
-    redirect_to static_pages_index_path
+    redirect_to games_path
   end
 
   def show
     @game = Game.find(params[:id])
+  end
+
+  def update
+    game = Game.find(params[:id])
+    # TODO: this is a temporary construction
+    # longer term this should be an agnostic method called by a client that
+    # can layer on semantics and act accordingly on success (or failure).
+    cmd = params[:cmd]
+    case cmd
+    when 'join'
+      player_id = current_player.id
+      if game.join(player_id)
+        # TODO: add pieces
+      end
+    end
+    redirect_to game_path
   end
 
   private
