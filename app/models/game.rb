@@ -14,6 +14,7 @@ class Game < ActiveRecord::Base
     games.reject { |g| g.black_player_id == player_id }
   end
 
+  # TODO: try with scopes
   def white_pieces
     return [] unless white_player
     pieces.where(player_id: white_player.id)
@@ -33,5 +34,31 @@ class Game < ActiveRecord::Base
   def join(player_id)
     # NOTE assumes always joining as black for now
     update_attributes(black_player_id: player_id) unless black_player_id
+  end
+
+  def create_white_pieces
+    (0..7).each do |pawn_x|
+      Pawn.create(game_id: id, player_id: white_player_id, pos_x: pawn_x, pos_y: 1)
+    end
+    (0..1).each do |which|
+      s = which * 7
+      f = which == 0 ? 1 : -1
+      Rook.create(game_id: id, player_id: white_player_id, pos_x: s, pos_y: 0)
+      Knight.create(game_id: id, player_id: white_player_id, pos_x: s+f, pos_y: 0)
+      Bishop.create(game_id: id, player_id: white_player_id, pos_x: s+f*2, pos_y: 0)
+    end
+  end
+
+  def create_black_pieces
+    (0..7).each do |pawn_x|
+      Pawn.create(game_id: id, player_id: black_player_id, pos_x: pawn_x, pos_y: 6)
+    end
+    (0..1).each do |which|
+      s = which * 7
+      f = which == 0 ? 1 : -1
+      Rook.create(game_id: id, player_id: black_player_id, pos_x: s, pos_y: 7)
+      Knight.create(game_id: id, player_id: black_player_id, pos_x: s+f, pos_y: 7)
+      Bishop.create(game_id: id, player_id: black_player_id, pos_x: s+f*2, pos_y: 7)
+    end
   end
 end
