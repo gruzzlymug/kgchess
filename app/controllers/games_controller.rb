@@ -31,12 +31,14 @@ class GamesController < ApplicationController
     # TODO: this is a temporary construction
     # longer term this should be an agnostic method called by a client that
     # can layer on semantics and act accordingly on success (or failure).
+    # TODO: use strict params
     cmd = params[:cmd]
     case cmd
     when 'join'
       player_id = current_player.id
       if game.join(player_id)
-        # TODO: add pieces
+        game.create_white_pieces
+        game.create_black_pieces
       end
     end
     redirect_to game_path

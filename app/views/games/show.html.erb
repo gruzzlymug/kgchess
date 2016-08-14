@@ -1,3 +1,18 @@
+<style type="text/css">
+.light {
+  background-color: gainsboro;
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+}
+.dark {
+  background-color: darkgray;
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+}
+</style>
+
 <h1>Game Details</h1>
 <h3><%= @game.name %></h3>
 <% if @game.white_player_id %>
@@ -9,3 +24,21 @@
 <% if @game.joinable?(current_player.id) %>
 <%= button_to 'Join Game', game_path, method: 'patch', params: { cmd: 'join' } %>
 <% end %>
+
+<%
+  pieces = @game.pieces
+  (0..7).each do |row_id|
+%>
+  <div class="">
+<%
+    (0..7).each do |col_id|
+      p = pieces.select { |pp| pp.pos_x == col_id && pp.pos_y == row_id }.first
+      ps = piece_html(p.type, p.player == @game.white_player) if p
+      color = ((row_id + col_id) % 2) == 0 ? 'light' : 'dark'
+%><span class="<%=color %>" title="hey"><%= ps ? ps.html_safe : '&nbsp;'.html_safe %></span><%
+    end
+%>
+  </div>
+<%
+  end
+%>
