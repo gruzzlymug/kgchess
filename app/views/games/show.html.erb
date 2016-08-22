@@ -3,13 +3,13 @@
   background-color: gainsboro;
   display: inline-block;
   text-align: center;
-  width: 20px;
+  width: 46px;
 }
 .dark {
   background-color: darkgray;
   display: inline-block;
   text-align: center;
-  width: 20px;
+  width: 46px;
 }
 </style>
 
@@ -35,7 +35,7 @@
       p = pieces.select { |pp| pp.pos_x == col_id && pp.pos_y == row_id }.first
       ps = piece_html(p.type, p.player == @game.white_player) if p
       color = ((row_id + col_id) % 2) == 0 ? 'light' : 'dark'
-%><span class="<%=color %>" title="hey"><%= ps ? ps.html_safe : '&nbsp;'.html_safe %></span><%
+%><span class="piece <%=color %>" title="hey"><%= ps ? ps.html_safe : '&nbsp;'.html_safe %></span><%
     end
 %>
   </div>
