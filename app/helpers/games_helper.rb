@@ -10,6 +10,10 @@ module GamesHelper
       is_white ? '&#9817;' : '&#9823;'
     when 'Rook'
       is_white ? '&#9814;' : '&#9820;'
+    when 'Queen'
+      is_white ? '&#9813;' : '&#9819;'
+    when 'King'
+      is_white ? '&#9812;' : '&#9818;'
     else
       is_white ? '?' : '!'
     end
