@@ -37,28 +37,25 @@ class Game < ActiveRecord::Base
   end
 
   def create_white_pieces
-    (0..7).each do |pawn_x|
-      Pawn.create(game_id: id, player_id: white_player_id, pos_x: pawn_x, pos_y: 1)
-    end
-    (0..1).each do |which|
-      s = which * 7
-      f = which == 0 ? 1 : -1
-      Rook.create(game_id: id, player_id: white_player_id, pos_x: s, pos_y: 0)
-      Knight.create(game_id: id, player_id: white_player_id, pos_x: s+f, pos_y: 0)
-      Bishop.create(game_id: id, player_id: white_player_id, pos_x: s+f*2, pos_y: 0)
-    end
+    create_pieces(white_player_id, 6, 7)
   end
 
   def create_black_pieces
+    create_pieces(black_player_id, 1, 0)
+  end
+
+  def create_pieces(player_id, pawn_row, other_row)
     (0..7).each do |pawn_x|
-      Pawn.create(game_id: id, player_id: black_player_id, pos_x: pawn_x, pos_y: 6)
+      Pawn.create(game_id: id, player_id: player_id, pos_x: pawn_x, pos_y: pawn_row)
     end
     (0..1).each do |which|
       s = which * 7
       f = which == 0 ? 1 : -1
-      Rook.create(game_id: id, player_id: black_player_id, pos_x: s, pos_y: 7)
-      Knight.create(game_id: id, player_id: black_player_id, pos_x: s+f, pos_y: 7)
-      Bishop.create(game_id: id, player_id: black_player_id, pos_x: s+f*2, pos_y: 7)
+      Rook.create(game_id: id, player_id: player_id, pos_x: s, pos_y: other_row)
+      Knight.create(game_id: id, player_id: player_id, pos_x: s+f, pos_y: other_row)
+      Bishop.create(game_id: id, player_id: player_id, pos_x: s+f*2, pos_y: other_row)
     end
+    Queen.create(game_id: id, player_id: player_id, pos_x: 3, pos_y: other_row)
+    King.create(game_id: id, player_id: player_id, pos_x: 4, pos_y: other_row)
   end
 end
