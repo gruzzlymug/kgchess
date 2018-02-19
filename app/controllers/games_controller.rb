@@ -40,8 +40,14 @@ class GamesController < ApplicationController
         game.create_white_pieces
         game.create_black_pieces
       end
+    else
+      puts "Unknown command, cannot update game"
     end
-    redirect_to game_path
+
+    respond_to do |format|
+      format.html { redirect_to game_path }
+      format.json { render json: game }
+    end
   end
 
   private
