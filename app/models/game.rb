@@ -58,4 +58,15 @@ class Game < ActiveRecord::Base
     Queen.create(game_id: id, player_id: player_id, pos_x: 3, pos_y: other_row)
     King.create(game_id: id, player_id: player_id, pos_x: 4, pos_y: other_row)
   end
+
+  def select_piece(player_id, piece_id)
+    selection = pieces.where({ player_id: player_id, id: piece_id })
+    unless selection.nil?
+      pieces.update({ status: 'ok' })
+      selection.update({ status: 'selected' })
+      return true
+    end
+
+    false
+  end
 end
