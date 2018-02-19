@@ -69,4 +69,15 @@ class Game < ActiveRecord::Base
 
     false
   end
+
+  def move_selected_piece(player_id, dest_row, dest_col)
+    # TODO validate row, col
+    selection = pieces.where({ player_id: player_id, status: 'selected' })
+    unless selection.nil?
+      selection.update({ pos_y: dest_row, pos_x: dest_col })
+      return true
+    end
+
+    false
+  end
 end
