@@ -33,9 +33,16 @@
 <%
     (0..7).each do |col_id|
       p = pieces.select { |pp| pp.pos_x == col_id && pp.pos_y == row_id }.first
-      ps = piece_html(p.type, p.player == @game.white_player) if p
-      color = ((row_id + col_id) % 2) == 0 ? 'light' : 'dark'
-%><span class="piece <%=color %>" title="hey"><%= ps ? ps.html_safe : '&nbsp;'.html_safe %></span><%
+      if p
+        ps = piece_html(p.type, p.player == @game.white_player)
+        tip = p.type
+        draggable = p.player_id == current_player.id
+        html = ps.html_safe
+      else
+        html = '&nbsp;'.html_safe
+      end
+      color_class = ((row_id + col_id) % 2) == 0 ? 'light' : 'dark'
+      %><span class="piece <%=color_class %>" draggable="<%=draggable %>" title="<%=tip %>"><%=html %></span><%
     end
 %>
   </div>
