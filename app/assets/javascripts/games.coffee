@@ -1,9 +1,6 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-@paintIt = () ->
-    console.log("ondragHandler")
-
 @dragStartHandler = (e) ->
     gameId = $("#board").data("id")
     pieceId = e.target.attributes["data-piece-id"].value
@@ -14,12 +11,20 @@
         success: (data, textStatus, jqXHR) ->
             console.log data
     })
-    #paintIt()
 
 @dropHandler = (e) ->
     e.preventDefault()
     e.stopPropagation()
-    console.log(e.target)
+    gameId = $("#board").data("id")
+    row = e.target.attributes["data-y"].value
+    col = e.target.attributes["data-x"].value
+    $.ajax({
+        url: "/games/#{gameId}.json",
+        type :"put",
+        data: { 'cmd': 'move', 'row': row, 'col': col },
+        success: (data, textStatus, jqXHR) ->
+            console.log(e.target)
+    })
 
 $ ->
     movablePieces = $("div[draggable]")
