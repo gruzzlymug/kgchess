@@ -1,4 +1,4 @@
-class AddFksToPiece < ActiveRecord::Migration
+class AddFksToPiece < ActiveRecord::Migration[5.1]
   def up
     change_table :pieces, bulk: true do |t|
       t.belongs_to :game
