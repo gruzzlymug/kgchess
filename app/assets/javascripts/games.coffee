@@ -5,16 +5,16 @@
     console.log("ondragHandler")
 
 @dragStartHandler = (e) ->
+    gameId = $("#board").data("id")
+    pieceId = e.target.attributes["data-piece-id"].value
     $.ajax({
-        url: "/games/8.json",
+        url: "/games/#{gameId}.json",
         type :"put",
-        data: {},
+        data: { 'cmd': 'select', 'pieceId': pieceId },
         success: (data, textStatus, jqXHR) ->
-            console.log "Successful AJAX call: #{data}"
+            console.log data
     })
     #paintIt()
-    #console.log("xx: " + e)
-    x = 0
 
 @dropHandler = (e) ->
     e.preventDefault()
@@ -22,7 +22,7 @@
     console.log(e.target)
 
 $ ->
-    movablePieces = $("span[draggable]")
+    movablePieces = $("div[draggable]")
     $.each(movablePieces, (i, o) -> o.ondragstart = dragStartHandler)
 
     possibleMoves = $(".square")

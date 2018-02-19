@@ -40,6 +40,8 @@ class GamesController < ApplicationController
         game.create_white_pieces
         game.create_black_pieces
       end
+    when 'select'
+      selected = game.select_piece(current_player.id, params[:pieceId])
     else
       puts "Unknown command, cannot update game"
     end

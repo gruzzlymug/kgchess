@@ -25,6 +25,7 @@
 <%= button_to 'Join Game', game_path, method: 'patch', params: { cmd: 'join' } %>
 <% end %>
 
+<div id="board" data-id=<%=@game.id %>>
 <%
   pieces = @game.pieces
   (0..7).each do |row_id|
@@ -44,10 +45,11 @@
       styles = ['square']
       styles << (((row_id + col_id) % 2) == 0 ? 'light' : 'dark')
       styles << 'draggable' if draggable
-      %><span class="<%=styles.join(' ') %>" <%="draggable=true" if draggable %> data-x=<%=col_id %> data-y=<%=row_id%> ><%=html %></span><%
+      %><div class="<%=styles.join(' ') %>" <%="data-piece-id=#{p.id} draggable=true" if draggable %> data-x=<%=col_id %> data-y=<%=row_id%> ><%=html %></div><%
     end
 %>
   </div>
 <%
   end
 %>
+</div>
