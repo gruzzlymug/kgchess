@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'static_pages/index'
   get 'static_pages/about'
   get 'static_pages/goodbye'
+  get 'static_pages/leaderboard'
 
   devise_for :players
   # The priority is based upon order of creation:

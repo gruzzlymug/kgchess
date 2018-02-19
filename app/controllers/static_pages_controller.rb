@@ -3,6 +3,9 @@ class StaticPagesController < ApplicationController
   def index
   end
 
+  def leaderboard
+  end
+
   def about
   end
 
