@@ -41,8 +41,10 @@
       else
         html = '&nbsp;'.html_safe
       end
-      color_class = ((row_id + col_id) % 2) == 0 ? 'light' : 'dark'
-      %><span class="piece <%=color_class %>" draggable="<%=draggable %>" title="<%=tip %>"><%=html %></span><%
+      styles = ['square']
+      styles << (((row_id + col_id) % 2) == 0 ? 'light' : 'dark')
+      styles << 'draggable' if draggable
+      %><span class="<%=styles.join(' ') %>" <%="draggable=true" if draggable %> data-x=<%=col_id %> data-y=<%=row_id%> ><%=html %></span><%
     end
 %>
   </div>
