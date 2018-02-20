@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This controller provides access to static pages.
 class StaticPagesController < ApplicationController
   def index; end
