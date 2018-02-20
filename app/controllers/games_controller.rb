@@ -42,10 +42,12 @@ class GamesController < ApplicationController
       end
     when 'select'
       selected = game.select_piece(current_player.id, params[:pieceId])
+      puts 'FAILED TO SELECT PIECE' unless selected
     when 'move'
       moved = game.move_selected_piece(current_player.id, params[:row], params[:col])
+      puts 'FAILED TO MOVE PIECE' unless moved
     else
-      puts "Unknown command, cannot update game"
+      puts 'Unknown command, cannot update game'
     end
 
     respond_to do |format|
