@@ -61,23 +61,20 @@ class Game < ActiveRecord::Base
 
   def select_piece(player_id, piece_id)
     selection = pieces.where(player_id: player_id, id: piece_id)
-    unless selection.nil?
-      pieces.update(status: 'ok')
-      selection.update(status: 'selected')
-      return true
-    end
+    return false if selection.nil?
 
-    false
+    pieces.update(status: 'ok')
+    selection.update(status: 'selected')
+    true
   end
 
-  def move_selected_piece(player_id, dest_row, dest_col)
-    # TODO: validate row, col
-    selection = pieces.where(player_id: player_id, status: 'selected')
-    unless selection.nil?
-      selection.update(pos_y: dest_row, pos_x: dest_col)
-      return true
-    end
+  def move_selected_piece(player_id, dest_x, dest_y)
+    # TODO: validate - destination must be on the board
+    mover = pieces.where(player_id: player_id, status: 'selected').first
+    return false if mover.nil?
+    return false if mover.obstructed?(dest_x, dest_y)
 
-    false
+    mover.update(pos_x: dest_x, pos_y: dest_y)
+    true
   end
 end
