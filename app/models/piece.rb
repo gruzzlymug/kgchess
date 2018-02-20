@@ -36,13 +36,11 @@ class Piece < ActiveRecord::Base
   private
 
   def move_type(udx, udy)
-    return 'no_move' if (udx + udy).zero?
-
-    move_type = 'unchecked'
-    move_type = 'vert' if udx.zero?
-    move_type = 'horiz' if udy.zero?
-    move_type = 'diag' if udx == udy
-    move_type
+    return 'no_move' if udx.zero? && udy.zero?
+    return 'vert' if udx.zero?
+    return 'horiz' if udy.zero?
+    return 'diag' if udx == udy
+    'unchecked'
   end
 
   def obs_vert?(dest_y)
