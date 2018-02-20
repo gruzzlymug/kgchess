@@ -5,61 +5,73 @@ class Piece < ActiveRecord::Base
 
   def obstructed?(dest_x, dest_y)
     #puts "p (#{pos_x},#{pos_y}), d (#{dest_x},#{dest_y})"
-
-    movement = move_type(dest_x, dest_y)
+    dx = dest_x - pos_x
+    dy = dest_y - pos_y
+    udx = dx.abs
+    udy = dy.abs
+    #puts "udx: #{udx}, udy: #{udy}"
+    movement = move_type(udx, udy)
     #puts "Movement: #{movement}"
     case movement
     when 'unchecked'
       return false
     when 'vert'
-      min_y = [pos_y, dest_y].min
-      max_y = [pos_y, dest_y].max
-      obstructors = game.pieces.where(pos_x: pos_x).where("pos_y > ? AND pos_y < ?", min_y, max_y)
-      #puts "Found #{obstructors.size} things in the way"
-      return obstructors.any?
+      return obs_vert?(dest_y)
     when 'horiz'
-      min_x = [pos_x, dest_x].min
-      max_x = [pos_x, dest_x].max
-      obstructors = game.pieces.where(pos_y: pos_y).where("pos_x > ? AND pos_x < ?", min_x, max_x)
-      #puts "Found #{obstructors.size} things in the way"
-      return obstructors.any?
+      return obs_horiz?(dest_x)
     when 'diag'
-      dx = dest_x - pos_x
-      ndx = dx / dx.abs
-      dy = dest_y - pos_y
-      ndy = dy / dy.abs
+      ndx = dx / udx
+      ndy = dy / udy
       #puts "ndx: #{ndx}, ndy: #{ndy}"
-      cx = pos_x + ndx
-      cy = pos_y + ndy
-      while cx != dest_x do
-        #puts "cx: #{cx}, cy: #{cy}"
-        obstructors = game.pieces.where(pos_x: cx).where(pos_y: cy)
-        #puts "Found something in the way" unless obstructors.size.zero?
-        return true if obstructors.any?
-        cx += ndx
-        cy += ndy
-      end
-      return false
+      return obs_diag?(dest_x, ndx, ndy)
     when 'no_move'
       return false
+    else
+      puts "Unexpected move type: #{movement}"
     end
 
-    puts "Unexpected move type: #{movement}"
     false
   end
 
   private
 
-  def move_type(dest_x, dest_y)
-    dx = (dest_x - pos_x).abs
-    dy = (dest_y - pos_y).abs
-    #puts "dx: #{dx}, dy: #{dy}"
-    return 'no_move' if (dx + dy).zero?
+  def move_type(udx, udy)
+    return 'no_move' if (udx + udy).zero?
 
     move_type = 'unchecked'
-    move_type = 'vert' if dx.zero?
-    move_type = 'horiz' if dy.zero?
-    move_type = 'diag' if dx == dy
+    move_type = 'vert' if udx.zero?
+    move_type = 'horiz' if udy.zero?
+    move_type = 'diag' if udx == udy
     move_type
+  end
+
+  def obs_vert?(dest_y)
+    min_y = [pos_y, dest_y].min
+    max_y = [pos_y, dest_y].max
+    obstructors = game.pieces.where(pos_x: pos_x).where("pos_y > ? AND pos_y < ?", min_y, max_y)
+    #puts "Found #{obstructors.size} things in the way"
+    return obstructors.any?
+  end
+
+  def obs_horiz?(dest_x)
+    min_x = [pos_x, dest_x].min
+    max_x = [pos_x, dest_x].max
+    obstructors = game.pieces.where(pos_y: pos_y).where("pos_x > ? AND pos_x < ?", min_x, max_x)
+    #puts "Found #{obstructors.size} things in the way"
+    return obstructors.any?
+  end
+
+  def obs_diag?(dest_x, ndx, ndy)
+    cx = pos_x + ndx
+    cy = pos_y + ndy
+    while cx != dest_x do
+      #puts "cx: #{cx}, cy: #{cy}"
+      obstructors = game.pieces.where(pos_x: cx).where(pos_y: cy)
+      #puts "Found something in the way" if obstructors.any?
+      return true if obstructors.any?
+      cx += ndx
+      cy += ndy
+    end
+    return false
   end
 end
