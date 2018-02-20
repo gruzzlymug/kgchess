@@ -8,3 +8,6 @@ AllCops:
     - db/migrate/*
     - db/schema.rb
     - db/seeds.rb
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

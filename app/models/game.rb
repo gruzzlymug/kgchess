@@ -50,20 +50,20 @@ class Game < ActiveRecord::Base
     end
     (0..1).each do |which|
       s = which * 7
-      f = which == 0 ? 1 : -1
+      f = which.zero? ? 1 : -1
       Rook.create(game_id: id, player_id: player_id, pos_x: s, pos_y: other_row)
-      Knight.create(game_id: id, player_id: player_id, pos_x: s+f, pos_y: other_row)
-      Bishop.create(game_id: id, player_id: player_id, pos_x: s+f*2, pos_y: other_row)
+      Knight.create(game_id: id, player_id: player_id, pos_x: s + f, pos_y: other_row)
+      Bishop.create(game_id: id, player_id: player_id, pos_x: s + f * 2, pos_y: other_row)
     end
     Queen.create(game_id: id, player_id: player_id, pos_x: 3, pos_y: other_row)
     King.create(game_id: id, player_id: player_id, pos_x: 4, pos_y: other_row)
   end
 
   def select_piece(player_id, piece_id)
-    selection = pieces.where({ player_id: player_id, id: piece_id })
+    selection = pieces.where(player_id: player_id, id: piece_id)
     unless selection.nil?
-      pieces.update({ status: 'ok' })
-      selection.update({ status: 'selected' })
+      pieces.update(status: 'ok')
+      selection.update(status: 'selected')
       return true
     end
 
@@ -71,10 +71,10 @@ class Game < ActiveRecord::Base
   end
 
   def move_selected_piece(player_id, dest_row, dest_col)
-    # TODO validate row, col
-    selection = pieces.where({ player_id: player_id, status: 'selected' })
+    # TODO: validate row, col
+    selection = pieces.where(player_id: player_id, status: 'selected')
     unless selection.nil?
-      selection.update({ pos_y: dest_row, pos_x: dest_col })
+      selection.update(pos_y: dest_row, pos_x: dest_col)
       return true
     end
 
