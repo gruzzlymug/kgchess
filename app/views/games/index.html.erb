@@ -3,7 +3,7 @@
   <div>
     <strong>White Games</strong><br>
   <% @white_games.each do |game| %>
-    <div><%= link_to game.name, game_path(game) %> vs <%=game.black_player.email %></div>
+      <div><%= link_to game.name, game_path(game) %><% if game.black_player %> vs <%=game.black_player.email %><% end %></div>
   <% end %>
   </div>
   <div>
