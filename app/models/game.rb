@@ -69,10 +69,9 @@ class Game < ActiveRecord::Base
   end
 
   def move_selected_piece(player_id, dest_x, dest_y)
-    # TODO: validate - destination must be on the board
     mover = pieces.where(player_id: player_id, status: 'selected').first
     return false if mover.nil?
-    return false if mover.obstructed?(dest_x, dest_y)
+    return false unless mover.valid_move?(dest_x, dest_y)
 
     mover.update(pos_x: dest_x, pos_y: dest_y)
     true

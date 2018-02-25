@@ -3,6 +3,12 @@ class Piece < ActiveRecord::Base
   belongs_to :game
   belongs_to :player
 
+  def valid_move?(dest_x, dest_y)
+    # TODO: validate - destination must be on the board
+    return false if dest_x == pos_x && dest_y == pos_y
+    true
+  end
+
   def obstructed?(dest_x, dest_y)
     #puts "p (#{pos_x},#{pos_y}), d (#{dest_x},#{dest_y})"
     dx = dest_x - pos_x
