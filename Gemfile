@@ -38,6 +38,9 @@ gem 'devise'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a console
   gem 'byebug'
+
+  gem 'factory_bot_rails'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -49,4 +52,9 @@ group :development do
   gem 'spring'
 
   gem 'rubocop'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'selenium-webdriver'
 end
