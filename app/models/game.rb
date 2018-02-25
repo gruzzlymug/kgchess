@@ -4,6 +4,7 @@ class Game < ActiveRecord::Base
   belongs_to :black_player, class_name: 'Player'
 
   has_many :pieces
+  belongs_to :selected_piece, class_name: 'Piece'
 
   def self.available_to_join(player_id)
     t = Game.arel_table
@@ -63,17 +64,15 @@ class Game < ActiveRecord::Base
     selection = pieces.where(player_id: player_id, id: piece_id)
     return false if selection.nil?
 
-    pieces.update(status: 'ok')
-    selection.update(status: 'selected')
+    update(selected_piece_id: piece_id)
     true
   end
 
   def move_selected_piece(player_id, dest_x, dest_y)
-    mover = pieces.where(player_id: player_id, status: 'selected').first
-    return false if mover.nil?
-    return false unless mover.valid_move?(dest_x, dest_y)
+    return false if selected_piece.nil?
+    return false unless selected_piece.valid_move?(dest_x, dest_y)
 
-    mover.update(pos_x: dest_x, pos_y: dest_y)
+    selected_piece.update(pos_x: dest_x, pos_y: dest_y)
     true
   end
 end
