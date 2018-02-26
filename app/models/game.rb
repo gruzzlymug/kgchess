@@ -34,9 +34,10 @@ class Game < ActiveRecord::Base
 
   def join(player_id)
     # NOTE assumes always joining as black for now
-    update_attributes(black_player_id: player_id) unless black_player_id
-    create_white_pieces
-    create_black_pieces
+    if black_player_id.nil? && update_attributes(black_player_id: player_id)
+      create_white_pieces
+      create_black_pieces
+    end
   end
 
   def create_pieces(player_id, pawn_row, other_row)
