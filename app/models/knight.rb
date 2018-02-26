@@ -1,3 +1,4 @@
+# A piece representing armored cavalry
 class Knight < Piece
   def valid_move?(dest_x, dest_y)
     return false unless super(dest_x, dest_y)

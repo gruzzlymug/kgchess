@@ -1,3 +1,4 @@
+# Formerly the piece was called the tower
 class Rook < Piece
   def valid_move?(dest_x, dest_y)
     return false unless super(dest_x, dest_y)
