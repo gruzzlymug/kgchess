@@ -16,10 +16,10 @@
 <h1>Game Details</h1>
 <h3><%= @game.name %></h3>
 <% if @game.white_player_id %>
-<div>White player: <%= @game.white_player.email %></div>
+  <div>White player: <%= @game.white_player.email %><%='*' if @game.player_turn == @game.white_player_id %></div>
 <% end %>
 <% if @game.black_player_id %>
-<div>Black player: <%= @game.black_player.email %></div>
+  <div>Black player: <%= @game.black_player.email %><%='*' if @game.player_turn == @game.black_player_id %></div>
 <% end %>
 <% if @game.joinable?(current_player.id) %>
 <%= button_to 'Join Game', game_path, method: 'patch', params: { cmd: 'join' } %>
@@ -35,7 +35,7 @@
     (0..7).each do |col_id|
       p = pieces.select { |pp| pp.pos_x == col_id && pp.pos_y == row_id }.first
       if p
-        ps = piece_html(p.type, p.player == @game.white_player)
+        ps = piece_html(p.type, p.player_id == @game.white_player_id)
         tip = p.type
         draggable = p.player_id == current_player.id
         html = ps.html_safe
