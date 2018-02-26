@@ -16,6 +16,7 @@
 * Drag and Drop Piece Movement
 * Integration with [CodeShip](http://codeship.com) and [Heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5)
 
-### Tests
+### Testing
 
-* TBD
+* FactoryBot
+* RSpec
