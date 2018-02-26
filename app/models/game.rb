@@ -34,9 +34,10 @@ class Game < ActiveRecord::Base
 
   def join(player_id)
     # NOTE assumes always joining as black for now
-    update_attributes(black_player_id: player_id) unless black_player_id
-    create_white_pieces
-    create_black_pieces
+    if black_player_id.nil? && update_attributes(black_player_id: player_id)
+      create_white_pieces
+      create_black_pieces
+    end
   end
 
   def create_pieces(player_id, pawn_row, other_row)
@@ -54,7 +55,14 @@ class Game < ActiveRecord::Base
     King.create(game_id: id, player_id: player_id, pos_x: 4, pos_y: other_row)
   end
 
+  def player_turn
+    return nil unless white_player_id && black_player_id
+    (turn % 2).zero? ? white_player_id : black_player_id
+  end
+
   def select_piece(player_id, piece_id)
+    return false unless player_turn == player_id
+
     selection = pieces.where(player_id: player_id, id: piece_id)
     return false if selection.nil?
 
@@ -63,6 +71,8 @@ class Game < ActiveRecord::Base
   end
 
   def move_selected_piece(player_id, dest_x, dest_y)
+    return false unless player_turn == player_id
+
     return false if selected_piece.nil?
     return false unless selected_piece.valid_move?(dest_x, dest_y)
 

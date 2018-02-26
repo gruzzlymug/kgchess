@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20160708223438) do
     t.string "name", null: false
     t.string "status"
     t.integer "selected_piece_id"
-    t.integer "turn"
+    t.integer "turn", default: 0, null: false
     t.integer "winner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

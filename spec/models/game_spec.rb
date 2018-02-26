@@ -13,4 +13,13 @@ describe Game do
       expect(g.joinable?(black_player)).to be(true)
     end
   end
+
+  context 'after second player joins' do
+    it 'should be the white players turn' do
+      g = create(:game)
+      black_player = create(:player)
+      g.join(black_player.id)
+      expect(g.player_turn).to equal(g.white_player_id)
+    end
+  end
 end
