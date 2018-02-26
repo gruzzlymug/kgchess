@@ -35,14 +35,8 @@ class Game < ActiveRecord::Base
   def join(player_id)
     # NOTE assumes always joining as black for now
     update_attributes(black_player_id: player_id) unless black_player_id
-  end
-
-  def create_white_pieces
-    create_pieces(white_player_id, 6, 7)
-  end
-
-  def create_black_pieces
-    create_pieces(black_player_id, 1, 0)
+    create_white_pieces
+    create_black_pieces
   end
 
   def create_pieces(player_id, pawn_row, other_row)
@@ -72,7 +66,17 @@ class Game < ActiveRecord::Base
     return false if selected_piece.nil?
     return false unless selected_piece.valid_move?(dest_x, dest_y)
 
-    selected_piece.update(pos_x: dest_x, pos_y: dest_y)
+    selected_piece.move_to(dest_x, dest_y)
     true
+  end
+
+  private
+
+  def create_white_pieces
+    create_pieces(white_player_id, 6, 7)
+  end
+
+  def create_black_pieces
+    create_pieces(black_player_id, 1, 0)
   end
 end
