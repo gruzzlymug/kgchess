@@ -3,11 +3,9 @@ class GamesController < ApplicationController
   before_action :authenticate_player!
 
   def index
-    if player_signed_in?
-      @white_games = current_player.white_games
-      @black_games = current_player.black_games
-      @open_games = Game.available_to_join(current_player.id)
-    end
+    @white_games = current_player.white_games
+    @black_games = current_player.black_games
+    @open_games = Game.available_to_join(current_player.id)
   end
 
   def new
@@ -15,7 +13,7 @@ class GamesController < ApplicationController
   end
 
   def create
-    game = Game.create(game_params.merge({ white_player_id: current_player.id }))
+    game = Game.create(game_params.merge(white_player_id: current_player.id))
     game.save
 
     redirect_to games_path

@@ -1,3 +1,4 @@
+# Controller for the Piece model, used to return piece data as JSON.
 class PiecesController < ApplicationController
   before_action :authenticate_player!
 

@@ -1,3 +1,4 @@
+# The pawn historically represents infantry, armed peasants or pikemen
 class Pawn < Piece
   def valid_move?(dest_x, dest_y)
     return false unless super(dest_x, dest_y)

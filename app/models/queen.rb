@@ -1,3 +1,4 @@
+# The most powerful piece in the game
 class Queen < Piece
   def valid_move?(dest_x, dest_y)
     return false unless super(dest_x, dest_y)

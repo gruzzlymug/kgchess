@@ -10,14 +10,11 @@ class Piece < ActiveRecord::Base
   end
 
   def obstructed?(dest_x, dest_y)
-    #puts "p (#{pos_x},#{pos_y}), d (#{dest_x},#{dest_y})"
     dx = dest_x - pos_x
     dy = dest_y - pos_y
     udx = dx.abs
     udy = dy.abs
-    #puts "udx: #{udx}, udy: #{udy}"
     movement = move_type(udx, udy)
-    #puts "Movement: #{movement}"
     case movement
     when 'unchecked'
       return false
@@ -28,7 +25,6 @@ class Piece < ActiveRecord::Base
     when 'diag'
       ndx = dx / udx
       ndy = dy / udy
-      #puts "ndx: #{ndx}, ndy: #{ndy}"
       return obs_diag?(dest_x, ndx, ndy)
     when 'no_move'
       return false
@@ -52,30 +48,26 @@ class Piece < ActiveRecord::Base
   def obs_vert?(dest_y)
     min_y = [pos_y, dest_y].min
     max_y = [pos_y, dest_y].max
-    obstructors = game.pieces.where(pos_x: pos_x).where("pos_y > ? AND pos_y < ?", min_y, max_y)
-    #puts "Found #{obstructors.size} things in the way"
-    return obstructors.any?
+    obstructors = game.pieces.where(pos_x: pos_x).where('pos_y > ? AND pos_y < ?', min_y, max_y)
+    obstructors.any?
   end
 
   def obs_horiz?(dest_x)
     min_x = [pos_x, dest_x].min
     max_x = [pos_x, dest_x].max
-    obstructors = game.pieces.where(pos_y: pos_y).where("pos_x > ? AND pos_x < ?", min_x, max_x)
-    #puts "Found #{obstructors.size} things in the way"
-    return obstructors.any?
+    obstructors = game.pieces.where(pos_y: pos_y).where('pos_x > ? AND pos_x < ?', min_x, max_x)
+    obstructors.any?
   end
 
   def obs_diag?(dest_x, ndx, ndy)
     cx = pos_x + ndx
     cy = pos_y + ndy
     while cx != dest_x do
-      #puts "cx: #{cx}, cy: #{cy}"
       obstructors = game.pieces.where(pos_x: cx).where(pos_y: cy)
-      #puts "Found something in the way" if obstructors.any?
       return true if obstructors.any?
       cx += ndx
       cy += ndy
     end
-    return false
+    false
   end
 end

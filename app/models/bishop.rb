@@ -1,3 +1,4 @@
+# Bishops are approximately equal in strength to knights
 class Bishop < Piece
   def valid_move?(dest_x, dest_y)
     return false unless super(dest_x, dest_y)
