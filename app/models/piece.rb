@@ -10,6 +10,9 @@ class Piece < ActiveRecord::Base
   end
 
   def obstructed?(dest_x, dest_y)
+    blocker = Piece.find_by_pos_x_and_pos_y_and_game_id(dest_x, dest_y, game_id)
+    return true unless blocker.nil? || blocker.player_id != player_id
+
     dx = dest_x - pos_x
     dy = dest_y - pos_y
     udx = dx.abs
