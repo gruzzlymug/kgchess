@@ -34,8 +34,7 @@ class GamesController < ApplicationController
     when 'join'
       player_id = current_player.id
       if game.join(player_id)
-        game.create_white_pieces
-        game.create_black_pieces
+        # TODO: do something or get rid of return value
       end
     when 'select'
       selected = game.select_piece(current_player.id, params[:pieceId])

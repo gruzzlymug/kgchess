@@ -35,6 +35,11 @@ class Piece < ActiveRecord::Base
     false
   end
 
+  def move_to(dest_x, dest_y)
+    move_count = moves + 1
+    update(pos_x: dest_x, pos_y: dest_y, moves: move_count)
+  end
+
   private
 
   def move_type(udx, udy)
