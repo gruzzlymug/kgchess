@@ -38,6 +38,8 @@ class Piece < ActiveRecord::Base
   def move_to(dest_x, dest_y)
     move_count = moves + 1
     update(pos_x: dest_x, pos_y: dest_y, moves: move_count)
+    game.turn += 1
+    game.save!
   end
 
   private

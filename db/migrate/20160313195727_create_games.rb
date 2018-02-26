@@ -6,7 +6,7 @@ class CreateGames < ActiveRecord::Migration[5.1]
       t.string :name, null: false
       t.string :status
       t.integer :selected_piece_id
-      t.integer :turn
+      t.integer :turn, null: false, default: 0
       t.integer :winner_id
 
       t.timestamps null: false
