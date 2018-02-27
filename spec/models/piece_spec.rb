@@ -8,10 +8,13 @@ describe Piece do
   end
 
   describe Pawn do
+    before do
+      @pawn = @game.white_pieces.where(type: 'Pawn').first
+    end
+
     describe '#valid_move?' do
       context 'on the first move' do
         before do
-          @pawn = @game.white_pieces.where(type: 'Pawn').first
           expect(@pawn.moves).to be(0)
         end
 
@@ -25,6 +28,33 @@ describe Piece do
           dest_x = @pawn.pos_x
           dest_y = @pawn.pos_y - 2
           expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
+        end
+      end
+    end
+  end
+
+  describe Rook do
+    describe '#valid_move?' do
+      context 'given an obstructing piece' do
+        it 'cannot move' do
+          rook = @game.piece_at(0, 0)
+          expect(rook.valid_move?(0, 3)).to be(false)
+        end
+      end
+    end
+  end
+
+  describe Knight do
+    describe '#valid_move?' do
+    end
+  end
+
+  describe Bishop do
+    describe '#valid_move?' do
+      context 'given an obstructing piece' do
+        it 'cannot move' do
+          bishop = @game.piece_at(2, 0)
+          expect(bishop.valid_move?(5, 3)).to be(false)
         end
       end
     end
