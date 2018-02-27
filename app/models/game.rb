@@ -76,8 +76,8 @@ class Game < ActiveRecord::Base
     return false if selected_piece.nil?
     return false unless selected_piece.valid_move?(dest_x, dest_y)
 
-    enemy = piece_at(dest_x, dest_y)
-    capture(enemy) unless enemy.nil?
+    opponent = piece_at(dest_x, dest_y)
+    capture(opponent) unless opponent.nil?
 
     selected_piece.move_to(dest_x, dest_y)
     true

@@ -11,7 +11,7 @@ class Piece < ActiveRecord::Base
 
   def obstructed?(dest_x, dest_y)
     blocker = game.piece_at(dest_x, dest_y)
-    return true unless blocker.nil? || blocker.enemy?(player_id)
+    return true unless blocker.nil? || blocker.opponent?(player_id)
 
     dx = dest_x - pos_x
     dy = dest_y - pos_y
@@ -45,7 +45,7 @@ class Piece < ActiveRecord::Base
     game.save!
   end
 
-  def enemy?(other_player_id)
+  def opponent?(other_player_id)
     player_id != other_player_id
   end
 
