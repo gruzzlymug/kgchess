@@ -15,7 +15,7 @@ describe Game do
   end
 
   context 'after second player joins' do
-    it 'should be the white players turn' do
+    it 'should be the white player\'s turn' do
       g = create(:game)
       black_player = create(:player)
       g.join(black_player.id)
