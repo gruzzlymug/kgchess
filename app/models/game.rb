@@ -76,8 +76,15 @@ class Game < ActiveRecord::Base
     return false if selected_piece.nil?
     return false unless selected_piece.valid_move?(dest_x, dest_y)
 
+    opponent = piece_at(dest_x, dest_y)
+    capture(opponent) unless opponent.nil?
+
     selected_piece.move_to(dest_x, dest_y)
     true
+  end
+
+  def piece_at(pos_x, pos_y)
+    pieces.where(pos_x: pos_x, pos_y: pos_y).first
   end
 
   private
@@ -88,5 +95,9 @@ class Game < ActiveRecord::Base
 
   def create_black_pieces
     create_pieces(black_player_id, 1, 0)
+  end
+
+  def capture(piece)
+    puts "CAPTURED A #{piece.type}"
   end
 end

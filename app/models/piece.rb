@@ -10,8 +10,8 @@ class Piece < ActiveRecord::Base
   end
 
   def obstructed?(dest_x, dest_y)
-    blocker = Piece.find_by_pos_x_and_pos_y_and_game_id(dest_x, dest_y, game_id)
-    return true unless blocker.nil? || blocker.player_id != player_id
+    blocker = game.piece_at(dest_x, dest_y)
+    return true unless blocker.nil? || blocker.opponent?(player_id)
 
     dx = dest_x - pos_x
     dy = dest_y - pos_y
@@ -43,6 +43,10 @@ class Piece < ActiveRecord::Base
     update(pos_x: dest_x, pos_y: dest_y, moves: move_count)
     game.turn += 1
     game.save!
+  end
+
+  def opponent?(other_player_id)
+    player_id != other_player_id
   end
 
   private
