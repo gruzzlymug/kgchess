@@ -18,12 +18,12 @@ class Game < ActiveRecord::Base
   # TODO: try with scopes
   def white_pieces
     return [] unless white_player
-    pieces.where(player_id: white_player.id, status: 'true')
+    pieces.where(player_id: white_player.id)
   end
 
   def black_pieces
     return [] unless black_player
-    pieces.where(player_id: black_player.id, status: 'true')
+    pieces.where(player_id: black_player.id)
   end
 
   def joinable?(player_id)
