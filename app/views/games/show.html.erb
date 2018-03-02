@@ -27,7 +27,7 @@
 
 <div id="board" data-id=<%=@game.id %>>
 <%
-  pieces = @game.pieces
+  pieces = @game.pieces.active
   (0..7).each do |row_id|
 %>
   <div class="">
