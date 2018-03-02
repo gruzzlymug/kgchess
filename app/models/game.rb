@@ -3,7 +3,7 @@ class Game < ActiveRecord::Base
   belongs_to :white_player, class_name: 'Player'
   belongs_to :black_player, class_name: 'Player'
 
-  has_many :pieces
+  has_many :pieces, dependent: :delete_all
   belongs_to :selected_piece, class_name: 'Piece'
 
   def self.available_to_join(player_id)
@@ -18,12 +18,12 @@ class Game < ActiveRecord::Base
   # TODO: try with scopes
   def white_pieces
     return [] unless white_player
-    pieces.where(player_id: white_player.id)
+    pieces.where(player_id: white_player.id, status: 'true')
   end
 
   def black_pieces
     return [] unless black_player
-    pieces.where(player_id: black_player.id)
+    pieces.where(player_id: black_player.id, status: 'true')
   end
 
   def joinable?(player_id)
@@ -34,7 +34,7 @@ class Game < ActiveRecord::Base
 
   def join(player_id)
     # NOTE assumes always joining as black for now
-    if black_player_id.nil? && update_attributes(black_player_id: player_id)
+    if black_player_id.nil? && update(black_player_id: player_id)
       create_white_pieces
       create_black_pieces
     end
@@ -63,7 +63,7 @@ class Game < ActiveRecord::Base
   def select_piece(player_id, piece_id)
     return false unless player_turn == player_id
 
-    selection = pieces.where(player_id: player_id, id: piece_id)
+    selection = pieces.where(player_id: player_id, id: piece_id, status: 'true')
     return false if selection.nil?
 
     update(selected_piece_id: piece_id)
@@ -98,6 +98,6 @@ class Game < ActiveRecord::Base
   end
 
   def capture(piece)
-    puts "CAPTURED A #{piece.type}"
+    piece.update(status: 'false')
   end
 end

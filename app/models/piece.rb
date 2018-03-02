@@ -1,7 +1,15 @@
 # Base class for STI chess piece models
+# Pieces have a 'status' field (a string). For now it will be treated as a
+# boolean value: 'true' if the piece is on the board, 'false' otherwise.
 class Piece < ActiveRecord::Base
   belongs_to :game
   belongs_to :player
+
+  scope :active, -> { where(status: 'true') }
+
+  def initialize(params)
+    super(params.merge(status: 'true'))
+  end
 
   def valid_move?(dest_x, dest_y)
     # TODO: validate - destination must be on the board
