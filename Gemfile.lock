@@ -118,6 +118,7 @@ GEM
     pg (0.21.0)
     powerpack (0.1.1)
     public_suffix (3.0.1)
+    puma (3.11.2)
     rack (2.0.4)
     rack-test (0.8.2)
       rack (>= 1.0, < 3)
@@ -244,6 +245,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   pg (~> 0.15)
+  puma
   rails (= 5.1.5)
   rspec-rails
   rubocop
