@@ -8,3 +8,4 @@ production:
   adapter: redis
   url: redis://redis-15352.c44.us-east-1-2.ec2.cloud.redislabs.com:15352
   channel_prefix: kgchess_production
+  password: <%= ENV['REDIS_PASSWORD'] %>
