@@ -25,7 +25,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # kg added
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'devise'
-# gem 'redis'
+gem 'puma'
+gem 'redis'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -56,8 +57,6 @@ group :development do
   gem 'rubocop'
   #gem 'puma'
 end
-
-gem 'puma'
 
 group :test do
   gem 'capybara'
