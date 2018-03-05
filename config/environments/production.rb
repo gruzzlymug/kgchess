@@ -88,4 +88,7 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
+
+  # ActionCable stuff
+  config.action_cable.allowed_request_origins = ['https://kgchess.herokuapp.com']
 end
