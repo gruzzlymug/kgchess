@@ -54,8 +54,10 @@ group :development do
   gem 'spring-commands-rspec'
 
   gem 'rubocop'
-  gem 'puma'
+  #gem 'puma'
 end
+
+gem 'puma'
 
 group :test do
   gem 'capybara'
