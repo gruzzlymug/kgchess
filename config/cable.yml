@@ -4,7 +4,7 @@ development:
 test:
   adapter: async
                
-#production:
-#  adapter: redis
-#  url: redis://10.10.3.153:6381
-#  channel_prefix: appname_production
+production:
+  adapter: redis
+  url: redis://redis-15352.c44.us-east-1-2.ec2.cloud.redislabs.com:15352
+  channel_prefix: kgchess_production
