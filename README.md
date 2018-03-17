@@ -4,19 +4,22 @@
 
 [Site](https://kgchess.herokuapp.com)
 
+### Features
+
+* Authentication using Devise
+* Drag and Drop Piece Movement
+* Real-time Notifications with Web Sockets (via ActionCable)
+* Continuous Integration and Deployment with [CodeShip](http://codeship.com) 
+* Deployed to [Heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5)
+
 ### Stack
 
 * Rails 5
 * Ruby 2.3.1
 * PostgreSQL
 
-### Features
-
-* Devise integration
-* Drag and Drop Piece Movement
-* Integration with [CodeShip](http://codeship.com) and [Heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5)
-
-### Testing
+### Test Environment
 
 * FactoryBot
 * RSpec
+* Spring
