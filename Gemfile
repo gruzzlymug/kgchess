@@ -55,7 +55,6 @@ group :development do
   gem 'spring-commands-rspec'
 
   gem 'rubocop'
-  #gem 'puma'
 end
 
 group :test do
