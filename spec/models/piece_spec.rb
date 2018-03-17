@@ -2,9 +2,11 @@ require 'rails_helper'
 
 describe Piece do
   before do
-    @game = create(:game)
+    @game = create(:game_with_one_player)
     black = create(:player)
     @game.join(black.id)
+
+    @empty_game = create(:game_with_two_players)
   end
 
   describe Pawn do
@@ -39,6 +41,26 @@ describe Piece do
         it 'cannot move' do
           rook = @game.piece_at(0, 0)
           expect(rook.valid_move?(0, 3)).to be(false)
+        end
+      end
+
+      context 'given an open board' do
+        it 'can move up' do
+          rook = @empty_game.add_white_piece('Rook', 0, 7)
+          expect(rook.valid_move?(0, 3)).to be(true)
+        end
+
+        it 'can move down' do
+          rook = @empty_game.add_white_piece('Rook', 3, 3)
+          expect(rook.valid_move?(3, 7)).to be(true)
+        end
+      end
+
+      context 'given a capturable enemy' do
+        it 'can capture it' do
+          rook = @empty_game.add_white_piece('Rook', 3, 6)
+          enemy = @empty_game.add_black_piece('Pawn', 3, 3)
+          expect(rook.valid_move?(enemy.pos_x, enemy.pos_y)).to be(true)
         end
       end
     end

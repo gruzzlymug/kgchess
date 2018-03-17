@@ -57,6 +57,12 @@ class Piece < ActiveRecord::Base
     player_id != other_player_id
   end
 
+  def as_json(*)
+    json = super.except("game_id", "moves", "status", "created_at", "updated_at")
+    json[:type] = type
+    json
+  end
+
   private
 
   def move_type(udx, udy)

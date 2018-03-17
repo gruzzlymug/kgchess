@@ -37,3 +37,6 @@ $ ->
     possibleMoves.on('dragover', (e) -> e.preventDefault())
 
     possibleMoves.on("drop dragdrop", dropHandler)
+    App.cable.subscriptions.create "GameChannel",
+      received: (data) ->
+        console.log("Received on GameChannel")
