@@ -1,3 +1,4 @@
+# Web socket used to exchange gameplay information
 class GameChannel < ApplicationCable::Channel
   def subscribed
     # TODO: pass id (params[:id]) to scope messages

@@ -58,7 +58,8 @@ class Piece < ActiveRecord::Base
   end
 
   def as_json(*)
-    json = super.except("game_id", "moves", "status", "created_at", "updated_at")
+    json = super
+    json = json.except('game_id', 'moves', 'status', 'created_at', 'updated_at')
     json[:type] = type
     json
   end
@@ -90,7 +91,8 @@ class Piece < ActiveRecord::Base
   def obs_diag?(dest_x, ndx, ndy)
     cx = pos_x + ndx
     cy = pos_y + ndy
-    while cx != dest_x do
+    loop do
+      break if cx == dest_x
       obstructors = game.pieces.where(pos_x: cx).where(pos_y: cy)
       return true if obstructors.any?
       cx += ndx

@@ -9,32 +9,6 @@ describe Piece do
     @empty_game = create(:game_with_two_players)
   end
 
-  describe Pawn do
-    before do
-      @pawn = @game.white_pieces.where(type: 'Pawn').first
-    end
-
-    describe '#valid_move?' do
-      context 'on the first move' do
-        before do
-          expect(@pawn.moves).to be(0)
-        end
-
-        it 'can move 1 space forward' do
-          dest_x = @pawn.pos_x
-          dest_y = @pawn.pos_y - 1
-          expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
-        end
-
-        it 'can move 2 spaces forward' do
-          dest_x = @pawn.pos_x
-          dest_y = @pawn.pos_y - 2
-          expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
-        end
-      end
-    end
-  end
-
   describe Rook do
     describe '#valid_move?' do
       context 'given an obstructing piece' do
@@ -71,13 +45,51 @@ describe Piece do
     end
   end
 
-  describe Bishop do
-    describe '#valid_move?' do
-      context 'given an obstructing piece' do
-        it 'cannot move' do
-          bishop = @game.piece_at(2, 0)
-          expect(bishop.valid_move?(5, 3)).to be(false)
-        end
+end
+
+describe Pawn do
+  before do
+    @game = create(:game_with_one_player)
+    black = create(:player)
+    @game.join(black.id)
+
+    @pawn = @game.white_pieces.where(type: 'Pawn').first
+  end
+
+  describe '#valid_move?' do
+    context 'on the first move' do
+      before do
+        expect(@pawn.moves).to be(0)
+      end
+
+      it 'can move 1 space forward' do
+        dest_x = @pawn.pos_x
+        dest_y = @pawn.pos_y - 1
+        expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
+      end
+
+      it 'can move 2 spaces forward' do
+        dest_x = @pawn.pos_x
+        dest_y = @pawn.pos_y - 2
+        expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
+      end
+    end
+  end
+end
+
+describe Bishop do
+  before do
+    @game = create(:game_with_one_player)
+    black = create(:player)
+    @game.join(black.id)
+
+    @bishop = @game.piece_at(2, 0)
+  end
+
+  describe '#valid_move?' do
+    context 'given an obstructing piece' do
+      it 'cannot move' do
+        expect(@bishop.valid_move?(5, 3)).to be(false)
       end
     end
   end
