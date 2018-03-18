@@ -9,7 +9,7 @@
     type :"put",
     data: { 'cmd': 'select', 'pieceId': pieceId },
     success: (data, textStatus, jqXHR) ->
-      console.log data
+      console.log(data)
   })
 
 @dropHandler = (e) ->
@@ -26,9 +26,33 @@
       console.log(e.target)
   })
 
+getPieceHtml = (type, color) ->
+  bias = if color == 'white' then 0 else 6
+  code = switch type
+    when 'Pawn' then 9817
+    when 'Knight' then 9816
+    when 'Bishop' then 9815
+    when 'Rook' then 9814
+    when 'Queen' then 9813
+    when 'King' then 9812
+  "&##{code+bias};"
+
+drawPiece = (piece, element) ->
+  # TODO: even this is too much work (but broken, moved piece not erased)
+  # element.innerHTML = '&nbsp;'
+  html = getPieceHtml(piece['type'], piece['player'])
+  element.innerHTML = html
+
+drawRow = (i, row, pieces) ->
+  # TODO: it is extra work clearing out every element in the row
+  element.innerHTML = '&nbsp;' for element in row.children
+  row_pieces = $.grep(pieces, (p) -> p['pos_y'] == i)
+  drawPiece(piece, row.children[piece['pos_x']]) for piece in row_pieces
+
 drawBoard = (pieces) ->
-  console.log("drawBoard")
-  console.log(pieces)
+  board = $('#board').get(0)
+  rows = board.children
+  drawRow(i, row, pieces) for row, i in rows
 
 getGameData = () ->
   gameId = $("#board").data("id")
@@ -52,5 +76,4 @@ $ ->
     possibleMoves.on("drop dragdrop", dropHandler)
     App.cable.subscriptions.create "GameChannel",
       received: (data) ->
-        console.log("Received on GameChannel")
         getGameData()
