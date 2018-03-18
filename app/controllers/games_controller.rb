@@ -32,23 +32,13 @@ class GamesController < ApplicationController
     cmd = params[:cmd]
     case cmd
     when 'join'
-      player_id = current_player.id
-      if game.join(player_id)
-        # TODO: do something or get rid of return value
-      end
+      joined = game.join(current_player.id)
+      puts 'FAILED TO JOIN' unless joined
     when 'select'
       selected = game.select_piece(current_player.id, params[:pieceId])
       puts 'FAILED TO SELECT PIECE' unless selected
     when 'move'
-      pos_x = params[:col].to_i
-      pos_y = params[:row].to_i
-      moved = game.move_selected_piece(current_player.id, pos_x, pos_y)
-      if moved
-        # TODO: scope messages to interested players/viewers
-        GameChannel.broadcast_to('game_channel', pos_x: pos_x, pos_y: pos_y)
-      else
-        puts 'FAILED TO MOVE PIECE'
-      end
+      handle_move(game, params)
     else
       puts 'Unknown command, cannot update game'
     end
@@ -60,6 +50,18 @@ class GamesController < ApplicationController
   end
 
   private
+
+  def handle_move(game, params)
+    pos_x = params[:col].to_i
+    pos_y = params[:row].to_i
+    moved = game.move_selected_piece(current_player.id, pos_x, pos_y)
+    if moved
+      # TODO: scope messages to interested players/viewers
+      GameChannel.broadcast_to('game_channel', pos_x: pos_x, pos_y: pos_y)
+    else
+      puts 'FAILED TO MOVE PIECE'
+    end
+  end
 
   def game_params
     params.require(:game).permit(:name)

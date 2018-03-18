@@ -7,7 +7,7 @@ class Pawn < Piece
 
     # TODO: pawn can still go backwards
     udy = (dest_y - pos_y).abs
-    return false if moves > 0 && udy != 1
+    return false if moves.positive? && udy != 1
     return false if moves.zero? && udy > 2
     return false if obstructed?(dest_x, dest_y)
     true

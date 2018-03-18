@@ -34,18 +34,19 @@ class Game < ActiveRecord::Base
 
   def join(player_id)
     # NOTE assumes always joining as black for now
-    if black_player_id.nil? && update(black_player_id: player_id)
-      create_white_pieces
-      create_black_pieces
-    end
+    return unless black_player_id.nil?
+
+    update(black_player_id: player_id)
+    create_white_pieces
+    create_black_pieces
   end
 
   def add_white_piece(type, pos_x, pos_y)
-    Piece.create(type: type, game_id: id, player_id: white_player_id, pos_x: pos_x, pos_y: pos_y)
+    add_piece(type, white_player_id, pos_x, pos_y)
   end
 
   def add_black_piece(type, pos_x, pos_y)
-    Piece.create(type: type, game_id: id, player_id: black_player_id, pos_x: pos_x, pos_y: pos_y)
+    add_piece(type, black_player_id, pos_x, pos_y)
   end
 
   def player_turn
@@ -106,7 +107,14 @@ class Game < ActiveRecord::Base
   end
 
   def add_piece(type, player_id, pos_x, pos_y)
-    Piece.create(type: type, game_id: id, player_id: player_id, pos_x: pos_x, pos_y: pos_y)
+    props = {
+      type: type,
+      game_id: id,
+      player_id: player_id,
+      pos_x: pos_x,
+      pos_y: pos_y
+    }
+    Piece.create(props)
   end
 
   def capture(piece)

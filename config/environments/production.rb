@@ -90,5 +90,6 @@ Rails.application.configure do
   end
 
   # ActionCable stuff
-  config.action_cable.allowed_request_origins = ['https://kgchess.herokuapp.com']
+  origins = ['https://kgchess.herokuapp.com']
+  config.action_cable.allowed_request_origins = origins
 end
