@@ -21,6 +21,14 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+
+    game_json = @game.as_json
+    active_pieces_json = @game.pieces.active.to_a.map!(&:as_json)
+    game_json[:active_pieces] = active_pieces_json
+    respond_to do |format|
+      format.html
+      format.json { render json: game_json }
+    end
   end
 
   def update

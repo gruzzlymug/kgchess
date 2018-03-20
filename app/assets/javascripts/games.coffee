@@ -40,27 +40,36 @@ getPieceHtml = (type, color) ->
 drawPiece = (piece, element) ->
   # TODO: even this is too much work (but broken, moved piece not erased)
   # element.innerHTML = '&nbsp;'
-  html = getPieceHtml(piece['type'], piece['player'])
+  html = getPieceHtml(piece.type, piece.player)
   element.innerHTML = html
 
 drawRow = (i, row, pieces) ->
   # TODO: it is extra work clearing out every element in the row
   element.innerHTML = '&nbsp;' for element in row.children
-  row_pieces = $.grep(pieces, (p) -> p['pos_y'] == i)
-  drawPiece(piece, row.children[piece['pos_x']]) for piece in row_pieces
+  row_pieces = $.grep(pieces, (p) -> p.pos_y == i)
+  drawPiece(piece, row.children[piece.pos_x]) for piece in row_pieces
 
 drawBoard = (pieces) ->
   board = $('#board').get(0)
   rows = board.children
   drawRow(i, row, pieces) for row, i in rows
 
+drawGame = (game) ->
+  pieces = colorizePieces(game.active_pieces, game.white_player_id)
+  drawBoard(pieces)
+
+colorizePieces = (pieces, white_id) ->
+  pieces.map((p) ->
+    p.player = if p.player_id == white_id then 'white' else 'black'
+    p)
+
 getGameData = () ->
-  gameId = $("#board").data("id")
+  gameId = $('#board').data('id')
   $.ajax({
-    url: "/games/#{gameId}/pieces",
-    type: "get",
+    url: "/games/#{gameId}.json",
+    type: 'get',
     success: (data, textStatus, jqXHR) ->
-      drawBoard(data)
+      drawGame(data)
   })
 
 $ ->
