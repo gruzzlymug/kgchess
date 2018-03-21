@@ -16,10 +16,10 @@
 <h1>Game Details</h1>
 <h3><%= @game.name %></h3>
 <% if @game.white_player_id %>
-  <div>White player: <%= @game.white_player.email %><%='*' if @game.player_turn == @game.white_player_id %></div>
+  <div id='white-player'>White player: <%= @game.white_player.email %></div>
 <% end %>
 <% if @game.black_player_id %>
-  <div>Black player: <%= @game.black_player.email %><%='*' if @game.player_turn == @game.black_player_id %></div>
+  <div id='black-player'>Black player: <%= @game.black_player.email %></div>
 <% end %>
 <% if @game.joinable?(current_player.id) %>
 <%= button_to 'Join Game', game_path, method: 'patch', params: { cmd: 'join' } %>
