@@ -53,8 +53,11 @@ getGameData = () ->
 
 drawGame = (game) ->
   pieces = colorizePieces(game.active_pieces, game.white_player_id)
-  drawBoard(pieces)
+  current_player_id = parseInt(document.cookie.split('=')[1])
+  drawBoard(pieces, current_player_id)
   updateTurn(game.turn)
+  movablePieces = $("div[draggable]")
+  $.each(movablePieces, (i, o) -> o.ondragstart = dragStartHandler)
 
 updateTurn = (turn) ->
   if turn % 2 == 0
@@ -73,22 +76,26 @@ colorizePieces = (pieces, white_id) ->
     p.player = if p.player_id == white_id then 'white' else 'black'
     p)
 
-drawBoard = (pieces) ->
+drawBoard = (pieces, player_id) ->
   board = $('#board').get(0)
   rows = board.children
-  drawRow(i, row, pieces) for row, i in rows
+  drawRow(i, row, pieces, player_id) for row, i in rows
 
-drawRow = (i, row, pieces) ->
+drawRow = (i, row, pieces, player_id) ->
   # TODO: it is extra work clearing out every element in the row
   element.innerHTML = '&nbsp;' for element in row.children
   row_pieces = $.grep(pieces, (p) -> p.pos_y == i)
-  drawPiece(piece, row.children[piece.pos_x]) for piece in row_pieces
+  drawPiece(piece, row.children[piece.pos_x], player_id) for piece in row_pieces
 
-drawPiece = (piece, element) ->
+drawPiece = (piece, element, player_id) ->
   # TODO: even this is too much work (but broken, moved piece not erased)
   # element.innerHTML = '&nbsp;'
   html = getPieceHtml(piece.type, piece.player)
   element.innerHTML = html
+  draggable = if piece.player_id == player_id then true else false
+  element.draggable = draggable
+  # this is accessed as .attributes['data-piece-id'] above
+  element.dataset.pieceId = piece.id
 
 getPieceHtml = (type, color) ->
   bias = if color == 'white' then 0 else 6

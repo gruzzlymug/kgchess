@@ -1,6 +1,11 @@
 # Controller for the Game model. Standard Rails stuff.
 class GamesController < ApplicationController
   before_action :authenticate_player!
+  before_action :set_player_cookie
+
+  def set_player_cookie
+    cookies[:player_id] = current_player.id || 'player'
+  end
 
   def index
     @white_games = current_player.white_games
@@ -38,6 +43,7 @@ class GamesController < ApplicationController
     # can layer on semantics and act accordingly on success (or failure).
     # TODO: use strict params
     cmd = params[:cmd]
+    puts "COMMAND: #{cmd}"
     case cmd
     when 'join'
       joined = game.join(current_player.id)
