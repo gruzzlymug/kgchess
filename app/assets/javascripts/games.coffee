@@ -53,11 +53,20 @@ getGameData = () ->
 
 drawGame = (game) ->
   pieces = colorizePieces(game.active_pieces, game.white_player_id)
-  current_player_id = parseInt(document.cookie.split('=')[1])
+  current_player_id = getPlayerId()
   drawBoard(pieces, current_player_id)
   updateTurn(game.turn)
   movablePieces = $("div[draggable]")
   $.each(movablePieces, (i, o) -> o.ondragstart = dragStartHandler)
+
+getPlayerId = () ->
+  cookies = document.cookie.split(';')
+  pairs = cookies.map((c) => c.trim().split('='))
+  player_cookie = pairs.find((p) -> p[0] == 'player_id')
+  if player_cookie
+    return parseInt(player_cookie[1])
+  else
+    return 'player'
 
 updateTurn = (turn) ->
   if turn % 2 == 0
