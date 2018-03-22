@@ -37,25 +37,11 @@ class GamesController < ApplicationController
   end
 
   def update
-    game = Game.find(params[:id])
-    # TODO: this is a temporary construction
-    # longer term this should be an agnostic method called by a client that
-    # can layer on semantics and act accordingly on success (or failure).
-    # TODO: use strict params
-    cmd = params[:cmd]
-    puts "COMMAND: #{cmd}"
-    case cmd
-    when 'join'
-      joined = game.join(current_player.id)
-      puts 'FAILED TO JOIN' unless joined
-    when 'select'
-      selected = game.select_piece(current_player.id, params[:pieceId])
-      puts 'FAILED TO SELECT PIECE' unless selected
-    when 'move'
-      handle_move(game, params)
-    else
-      puts 'Unknown command, cannot update game'
-    end
+    id = params.delete(:id)
+    game = Game.find(id)
+    # TODO: consider strict params
+    cmd = params.delete(:cmd)
+    dispatch_command(game, cmd, params)
 
     respond_to do |format|
       format.html { redirect_to game_path }
@@ -65,6 +51,20 @@ class GamesController < ApplicationController
 
   private
 
+  def dispatch_command(game, cmd, params)
+    case cmd
+    when 'join'
+      game.join(current_player.id)
+    when 'select'
+      piece_id = params[:pieceId]
+      game.select_piece(current_player.id, piece_id)
+    when 'move'
+      handle_move(game, params)
+    else
+      puts "Unknown command: '#{cmd}'"
+    end
+  end
+
   def handle_move(game, params)
     pos_x = params[:col].to_i
     pos_y = params[:row].to_i
@@ -72,9 +72,8 @@ class GamesController < ApplicationController
     if moved
       # TODO: scope messages to interested players/viewers
       GameChannel.broadcast_to('game_channel', pos_x: pos_x, pos_y: pos_y)
-    else
-      puts 'FAILED TO MOVE PIECE'
     end
+    moved
   end
 
   def game_params
