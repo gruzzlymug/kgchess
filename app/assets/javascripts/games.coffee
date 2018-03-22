@@ -97,8 +97,6 @@ drawRow = (i, row, pieces, player_id) ->
   drawPiece(piece, row.children[piece.pos_x], player_id) for piece in row_pieces
 
 drawPiece = (piece, element, player_id) ->
-  # TODO: even this is too much work (but broken, moved piece not erased)
-  # element.innerHTML = '&nbsp;'
   html = getPieceHtml(piece.type, piece.player)
   element.innerHTML = html
   draggable = if piece.player_id == player_id then true else false

@@ -12,7 +12,9 @@ class Piece < ActiveRecord::Base
   end
 
   def valid_move?(dest_x, dest_y)
-    # TODO: validate - destination must be on the board
+    return false if dest_x.negative? || dest_y.negative?
+    return false if dest_x > 7 || dest_y > 7
+
     return false if dest_x == pos_x && dest_y == pos_y
     true
   end

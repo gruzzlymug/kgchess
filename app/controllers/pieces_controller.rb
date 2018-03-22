@@ -4,7 +4,6 @@ class PiecesController < ApplicationController
 
   def index
     game = Game.find(params[:game_id])
-    white_id = game.white_player_id
     active_pieces = game.pieces.active
     render json: active_pieces
   end
