@@ -26,6 +26,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+    @player_color = @game.white_player_id == current_player.id ? 'white' : 'black'
 
     game_json = @game.as_json
     active_pieces_json = @game.pieces.active.to_a.map!(&:as_json)

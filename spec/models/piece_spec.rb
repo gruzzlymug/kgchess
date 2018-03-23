@@ -13,10 +13,12 @@ describe Piece do
     context 'every move' do
       it 'must be on the board' do
         game = create(:game_with_two_players)
-        piece = game.add_white_piece('Piece', 0, 7)
-        expect(piece.valid_move?(9, 9)).to be(false)
-        expect(piece.valid_move?(0, 0)).to be(true)
-        expect(piece.valid_move?(-1, -1)).to be(false)
+        piece = game.add_white_piece('Piece', 3, 3)
+        expect(piece.valid_move?(3, 9)).to be(false)
+        expect(piece.valid_move?(9, 3)).to be(false)
+        expect(piece.valid_move?(3, -1)).to be(false)
+        expect(piece.valid_move?(-1, 3)).to be(false)
+        expect(piece.valid_move?(3, 0)).to be(true)
       end
     end
   end

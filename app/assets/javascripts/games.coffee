@@ -53,11 +53,16 @@ getGameData = () ->
 
 drawGame = (game) ->
   pieces = colorizePieces(game.active_pieces, game.white_player_id)
+  playerColor = $('#board').data('player-color')
+  if playerColor == 'black'
+    pieces = pieces.map((p) ->
+      p.pos_y = 7 - p.pos_y
+      p)
   current_player_id = getPlayerId()
   drawBoard(pieces, current_player_id)
-  updateTurn(game.turn)
   movablePieces = $("div[draggable]")
   $.each(movablePieces, (i, o) -> o.ondragstart = dragStartHandler)
+  updateTurn(game.turn)
 
 getPlayerId = () ->
   cookies = document.cookie.split(';')
@@ -67,18 +72,6 @@ getPlayerId = () ->
     return parseInt(player_cookie[1])
   else
     return 'player'
-
-updateTurn = (turn) ->
-  if turn % 2 == 0
-    $('#white-player').removeClass('inactive-player')
-    $('#white-player').addClass('active-player')
-    $('#black-player').removeClass('active-player')
-    $('#black-player').addClass('inactive-player')
-  else
-    $('#white-player').remove('active-player')
-    $('#white-player').addClass('inactive-player')
-    $('#black-player').removeClass('inactive-player')
-    $('#black-player').addClass('active-player')
 
 colorizePieces = (pieces, white_id) ->
   pieces.map((p) ->
@@ -99,8 +92,7 @@ drawRow = (i, row, pieces, player_id) ->
 drawPiece = (piece, element, player_id) ->
   html = getPieceHtml(piece.type, piece.player)
   element.innerHTML = html
-  draggable = if piece.player_id == player_id then true else false
-  element.draggable = draggable
+  element.draggable = (piece.player_id == player_id)
   # this is accessed as .attributes['data-piece-id'] above
   element.dataset.pieceId = piece.id
 
@@ -114,3 +106,11 @@ getPieceHtml = (type, color) ->
     when 'Queen' then 9813
     when 'King' then 9812
   "&##{code+bias};"
+
+updateTurn = (turn) ->
+  if turn % 2 == 0
+    $('#white-player').addClass('active-player')
+    $('#black-player').removeClass('active-player')
+  else
+    $('#white-player').removeClass('active-player')
+    $('#black-player').addClass('active-player')
