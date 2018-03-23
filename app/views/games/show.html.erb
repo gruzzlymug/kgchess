@@ -25,27 +25,20 @@
 <%= button_to 'Join Game', game_path, method: 'patch', params: { cmd: 'join' } %>
 <% end %>
 
-<div id="board" data-id=<%=@game.id %>>
+<div id="board" data-id=<%=@game.id %> data-player-color=<%= @player_color %>>
 <%
-  pieces = @game.pieces.active
-  (0..7).each do |row_id|
+  viewing_as_black = current_player.id == @game.black_player_id
+  (0..7).each do |raw_row_id|
+    row_id = raw_row_id
+    row_id = 7 - row_id if viewing_as_black
 %>
   <div class="">
 <%
     (0..7).each do |col_id|
-      p = pieces.select { |pp| pp.pos_x == col_id && pp.pos_y == row_id }.first
-      if p
-        ps = piece_html(p.type, p.player_id == @game.white_player_id)
-        tip = p.type
-        draggable = p.player_id == current_player.id
-        html = ps.html_safe
-      else
-        html = '&nbsp;'.html_safe
-      end
       styles = ['square']
       styles << (((row_id + col_id) % 2) == 0 ? 'light' : 'dark')
-      styles << 'draggable' if draggable
-      %><div class="<%=styles.join(' ') %>" <%="data-piece-id=#{p.id} draggable=true" if draggable %> data-x=<%=col_id %> data-y=<%=row_id%> ><%=html %></div><%
+
+      %><div class="<%=styles.join(' ') %>" data-x=<%=col_id %> data-y=<%=row_id%> >&nbsp;</div><%
     end
 %>
   </div>

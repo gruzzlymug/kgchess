@@ -7,15 +7,16 @@
 ### Features
 
 * Authentication using Devise
-* Drag and Drop Piece Movement
-* Real-time Notifications with Web Sockets (via ActionCable)
+* Drag and drop piece movement
+* View game board from black or white perspective
+* Real-time notifications with web sockets (via ActionCable)
 * Continuous Integration and Deployment with [CodeShip](http://codeship.com) 
 * Deployed to [Heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5)
 
 ### Stack
 
-* Rails 5
-* Ruby 2.3.1
+* Rails 5.1.5
+* Ruby 2.5.0
 * PostgreSQL
 
 ### Test Environment
