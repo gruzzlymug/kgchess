@@ -29,12 +29,12 @@
 <%
   viewing_as_black = current_player.id == @game.black_player_id
   (0..7).each do |raw_row_id|
-    row_id = raw_row_id
-    row_id = 7 - row_id if viewing_as_black
+    row_id = viewing_as_black ? 7 - raw_row_id : raw_row_id
 %>
   <div class="">
 <%
-    (0..7).each do |col_id|
+    (0..7).each do |raw_col_id|
+      col_id = viewing_as_black ? 7 - raw_col_id : raw_col_id
       styles = ['square']
       styles << (((row_id + col_id) % 2) == 0 ? 'light' : 'dark')
 
