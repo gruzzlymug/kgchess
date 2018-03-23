@@ -40,6 +40,7 @@ drawGame = (game) ->
   playerColor = $('#board').data('player-color')
   if playerColor == 'black'
     pieces = pieces.map((p) ->
+      p.pos_x = 7 - p.pos_x
       p.pos_y = 7 - p.pos_y
       p)
   current_player_id = getPlayerId()
