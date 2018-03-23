@@ -26,22 +26,6 @@
       console.log(e.target)
   })
 
-$ ->
-    movablePieces = $("div[draggable]")
-    $.each(movablePieces, (i, o) -> o.ondragstart = dragStartHandler)
-
-    possibleMoves = $(".square")
-    # allow drop to fire
-    possibleMoves.on('dragenter', (e) -> e.preventDefault())
-    possibleMoves.on('dragleave', (e) -> e.preventDefault())
-    possibleMoves.on('dragover', (e) -> e.preventDefault())
-
-    possibleMoves.on("drop dragdrop", dropHandler)
-    getGameData()
-    App.cable.subscriptions.create "GameChannel",
-      received: (data) ->
-        getGameData()
-
 getGameData = () ->
   gameId = $('#board').data('id')
   $.ajax({
@@ -114,3 +98,16 @@ updateTurn = (turn) ->
   else
     $('#white-player').removeClass('active-player')
     $('#black-player').addClass('active-player')
+
+$(document).on 'turbolinks:load', ->
+  getGameData()
+  # allow drop events to fire
+  possibleMoves = $(".square")
+  possibleMoves.on('dragenter', (e) -> e.preventDefault())
+  possibleMoves.on('dragleave', (e) -> e.preventDefault())
+  possibleMoves.on('dragover', (e) -> e.preventDefault())
+  possibleMoves.on("drop dragdrop", dropHandler)
+  # subscribe to real-time notifications
+  App.cable.subscriptions.create "GameChannel",
+    received: (data) ->
+      getGameData()
