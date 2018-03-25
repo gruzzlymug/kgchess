@@ -29,13 +29,12 @@ describe Pawn do
     @game = create(:game_with_one_player)
     black = create(:player)
     @game.join(black.id)
-
-    @pawn = @game.white_pieces.where(type: 'Pawn').first
   end
 
   describe '#valid_move?' do
     context 'on the first move' do
       before do
+        @pawn = @game.white_pieces.where(type: 'Pawn').first
         expect(@pawn.moves).to be(0)
       end
 
@@ -49,6 +48,23 @@ describe Pawn do
         dest_x = @pawn.pos_x
         dest_y = @pawn.pos_y - 2
         expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
+      end
+    end
+
+    context 'when attacking' do
+      before do
+        @game = create(:game_with_two_players)
+        @pawn = @game.add_white_piece('Pawn', 3, 4)
+      end
+
+      it 'can capture ahead and to the left' do
+        opponent = @game.add_black_piece('Pawn', 2, 3)
+        expect(@pawn.valid_move?(2, 3)).to be(true)
+      end
+
+      it 'can capture ahead and to the right' do
+        opponent = @game.add_black_piece('Pawn', 4, 3)
+        expect(@pawn.valid_move?(4, 3)).to be(true)
       end
     end
   end
