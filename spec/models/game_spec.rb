@@ -35,4 +35,16 @@ describe Game do
       expect(victim.pos_y).to be(nil)
     end
   end
+
+  it 'supports castle' do
+    game = create(:game_with_two_players)
+    king = game.add_white_piece('King', 4, 7)
+    rook = game.add_white_piece('Rook', 7, 7)
+    game.select_piece(king.player_id, king.id)
+    game.move_selected_piece(king.player_id, 6, 7)
+    king.reload
+    rook.reload
+    expect(king.pos_x).to eq(6)
+    expect(rook.pos_x).to eq(5)
+  end
 end
