@@ -131,3 +131,21 @@ describe Bishop do
     end
   end
 end
+
+describe King do
+  describe '#valid_move?' do
+    it 'can castle to the left' do
+      game = create(:game_with_two_players)
+      king = game.add_white_piece('King', 4, 7)
+      rook = game.add_white_piece('Rook', 0, 7)
+      expect(king.valid_move?(1, 7)).to be(true)
+    end
+
+    it 'can castle to the right' do
+      game = create(:game_with_two_players)
+      king = game.add_white_piece('King', 4, 7)
+      rook = game.add_white_piece('Rook', 7, 7)
+      expect(king.valid_move?(6, 7)).to be(true)
+    end
+  end
+end
