@@ -1,23 +1,22 @@
 require 'rails_helper'
 
 describe Game do
+  let(:game) { create(:game_with_one_player) }
+  let(:empty_game) { create(:game_with_two_players) }
+  let(:black_player) { create(:player) }
+
   context 'when created' do
     it 'must have a white player' do
-      game = create(:game_with_one_player)
       expect(game.white_player).to be_instance_of(Player)
     end
 
     it 'should be joinable' do
-      game = create(:game_with_one_player)
-      black_player = create(:player)
       expect(game.joinable?(black_player)).to be(true)
     end
   end
 
   context 'after second player joins' do
     it 'should be the white player\'s turn' do
-      game = create(:game_with_one_player)
-      black_player = create(:player)
       game.join(black_player.id)
       expect(game.player_turn).to equal(game.white_player_id)
     end
@@ -25,7 +24,6 @@ describe Game do
 
   context 'after a piece is captured' do
     it 'should be removed from the board' do
-      empty_game = create(:game_with_two_players)
       rook = empty_game.add_white_piece('Rook', 3, 6)
       victim = empty_game.add_black_piece('Bishop', 3, 3)
       empty_game.select_piece(rook.player_id, rook.id)
@@ -37,11 +35,10 @@ describe Game do
   end
 
   it 'supports castle' do
-    game = create(:game_with_two_players)
-    king = game.add_white_piece('King', 4, 7)
-    rook = game.add_white_piece('Rook', 7, 7)
-    game.select_piece(king.player_id, king.id)
-    game.move_selected_piece(king.player_id, 6, 7)
+    king = empty_game.add_white_piece('King', 4, 7)
+    rook = empty_game.add_white_piece('Rook', 7, 7)
+    empty_game.select_piece(king.player_id, king.id)
+    empty_game.move_selected_piece(king.player_id, 6, 7)
     king.reload
     rook.reload
     expect(king.pos_x).to eq(6)

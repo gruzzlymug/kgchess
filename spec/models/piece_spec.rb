@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Piece do
-  before do
-    @game = create(:game_with_one_player)
-    black = create(:player)
-    @game.join(black.id)
+  let(:game) { create(:game_with_one_player) }
+  let(:empty_game) { create(:game_with_two_players) }
 
-    @empty_game = create(:game_with_two_players)
+  before do
+    black = create(:player)
+    game.join(black.id)
   end
 
   describe '#valid_move?' do
@@ -25,46 +25,45 @@ describe Piece do
 end
 
 describe Pawn do
+  let(:game) { create(:game_with_one_player) }
+
   before do
-    @game = create(:game_with_one_player)
     black = create(:player)
-    @game.join(black.id)
+    game.join(black.id)
   end
 
   describe '#valid_move?' do
     context 'on the first move' do
-      before do
-        @pawn = @game.white_pieces.where(type: 'Pawn').first
-        expect(@pawn.moves).to be(0)
+      let(:pawn) { game.white_pieces.where(type: 'Pawn').first }
+
+      before(:each) do
+        expect(pawn.moves).to be(0)
       end
 
       it 'can move 1 space forward' do
-        dest_x = @pawn.pos_x
-        dest_y = @pawn.pos_y - 1
-        expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
+        dest_x = pawn.pos_x
+        dest_y = pawn.pos_y - 1
+        expect(pawn.valid_move?(dest_x, dest_y)).to be(true)
       end
 
       it 'can move 2 spaces forward' do
-        dest_x = @pawn.pos_x
-        dest_y = @pawn.pos_y - 2
-        expect(@pawn.valid_move?(dest_x, dest_y)).to be(true)
+        dest_x = pawn.pos_x
+        dest_y = pawn.pos_y - 2
+        expect(pawn.valid_move?(dest_x, dest_y)).to be(true)
       end
     end
 
     context 'when attacking' do
-      before do
-        @game = create(:game_with_two_players)
-        @pawn = @game.add_white_piece('Pawn', 3, 4)
-      end
+      let(:pawn) { game.add_white_piece('Pawn', 3, 4) }
 
       it 'can capture ahead and to the left' do
-        opponent = @game.add_black_piece('Pawn', 2, 3)
-        expect(@pawn.valid_move?(2, 3)).to be(true)
+        opponent = game.add_black_piece('Pawn', 2, 3)
+        expect(pawn.valid_move?(2, 3)).to be(true)
       end
 
       it 'can capture ahead and to the right' do
-        opponent = @game.add_black_piece('Pawn', 4, 3)
-        expect(@pawn.valid_move?(4, 3)).to be(true)
+        opponent = game.add_black_piece('Pawn', 4, 3)
+        expect(pawn.valid_move?(4, 3)).to be(true)
       end
     end
   end
