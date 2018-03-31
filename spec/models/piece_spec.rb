@@ -57,12 +57,12 @@ describe Pawn do
       let(:pawn) { game.add_white_piece('Pawn', 3, 4) }
 
       it 'can capture ahead and to the left' do
-        opponent = game.add_black_piece('Pawn', 2, 3)
+        game.add_black_piece('Pawn', 2, 3)
         expect(pawn.valid_move?(2, 3)).to be(true)
       end
 
       it 'can capture ahead and to the right' do
-        opponent = game.add_black_piece('Pawn', 4, 3)
+        game.add_black_piece('Pawn', 4, 3)
         expect(pawn.valid_move?(4, 3)).to be(true)
       end
     end
