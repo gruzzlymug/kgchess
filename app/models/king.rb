@@ -18,6 +18,11 @@ class King < Piece
     super(dest_x, dest_y)
   end
 
+  def in_check?
+    opponents = game.opposing_pieces(player_id)
+    opponents.any? { |piece| piece.valid_move?(pos_x, pos_y) }
+  end
+
   private
 
   def valid_castle?(dest_x, dest_y, rook_x)
