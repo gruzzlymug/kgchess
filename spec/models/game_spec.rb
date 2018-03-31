@@ -44,11 +44,4 @@ describe Game do
     expect(king.pos_x).to eq(6)
     expect(rook.pos_x).to eq(5)
   end
-
-  it 'can determine check' do
-    king = empty_game.add_white_piece('King', 4, 7)
-    rook = empty_game.add_black_piece('Rook', 4, 3)
-    expect(rook.valid_move?(4, 7)).to be(true)
-    expect(king).to be_in_check
-  end
 end

@@ -23,29 +23,11 @@ class Piece < ActiveRecord::Base
     blocker = game.piece_at(dest_x, dest_y)
     return true unless blocker.nil? || blocker.opponent?(player_id)
 
-    dx = dest_x - pos_x
-    dy = dest_y - pos_y
-    udx = dx.abs
-    udy = dy.abs
-    movement = move_type(udx, udy)
-    case movement
-    when 'unchecked'
-      return false
-    when 'vert'
-      return obs_vert?(dest_y)
-    when 'horiz'
-      return obs_horiz?(dest_x)
-    when 'diag'
-      ndx = dx / udx
-      ndy = dy / udy
-      return obs_diag?(dest_x, ndx, ndy)
-    when 'no_move'
-      return false
-    else
-      puts "Unexpected move type: #{movement}"
-    end
+    movement = move_type(dest_x, dest_y)
+    return false if movement == 'unchecked'
+    return false if movement == 'no_move'
 
-    false
+    path_obstructed?(movement, dest_x, dest_y)
   end
 
   def move_to(dest_x, dest_y)
@@ -68,7 +50,10 @@ class Piece < ActiveRecord::Base
 
   private
 
-  def move_type(udx, udy)
+  def move_type(dest_x, dest_y)
+    udx = (dest_x - pos_x).abs
+    udy = (dest_y - pos_y).abs
+
     return 'no_move' if udx.zero? && udy.zero?
     return 'vert' if udx.zero?
     return 'horiz' if udy.zero?
@@ -76,30 +61,51 @@ class Piece < ActiveRecord::Base
     'unchecked'
   end
 
-  def obs_vert?(dest_y)
+  def path_obstructed?(movement, dest_x, dest_y)
+    case movement
+    when 'vert'
+      return vertically_obstructed?(dest_y)
+    when 'horiz'
+      return horizontally_obstructed?(dest_x)
+    when 'diag'
+      return diagonally_obstructed?(dest_x, dest_y)
+    end
+
+    raise "Unexpected move type: #{movement}"
+  end
+
+  def vertically_obstructed?(dest_y)
     min_y = [pos_y, dest_y].min
     max_y = [pos_y, dest_y].max
-    obstructors = game.pieces.where(pos_x: pos_x).where('pos_y > ? AND pos_y < ?', min_y, max_y)
+    # NOTE: file as in "rank and file"
+    pieces_in_file = game.pieces.where(pos_x: pos_x)
+    obstructors = pieces_in_file.where('pos_y > ? AND pos_y < ?', min_y, max_y)
     obstructors.any?
   end
 
-  def obs_horiz?(dest_x)
+  def horizontally_obstructed?(dest_x)
     min_x = [pos_x, dest_x].min
     max_x = [pos_x, dest_x].max
-    obstructors = game.pieces.where(pos_y: pos_y).where('pos_x > ? AND pos_x < ?', min_x, max_x)
+    pieces_in_rank = game.pieces.where(pos_y: pos_y)
+    obstructors = pieces_in_rank.where('pos_x > ? AND pos_x < ?', min_x, max_x)
     obstructors.any?
   end
 
-  def obs_diag?(dest_x, ndx, ndy)
+  def diagonally_obstructed?(dest_x, dest_y)
+    ndx = normalized_delta(pos_x, dest_x)
+    ndy = normalized_delta(pos_y, dest_y)
     cx = pos_x + ndx
     cy = pos_y + ndy
     loop do
-      break if cx == dest_x
-      obstructors = game.pieces.where(pos_x: cx).where(pos_y: cy)
-      return true if obstructors.any?
+      return false if cx == dest_x
+      return true if game.piece_at(cx, cy).present?
       cx += ndx
       cy += ndy
     end
-    false
+  end
+
+  def normalized_delta(from, to)
+    delta = to - from
+    delta / delta.abs
   end
 end
