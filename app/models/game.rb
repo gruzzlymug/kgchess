@@ -81,6 +81,11 @@ class Game < ActiveRecord::Base
     pieces.where(pos_x: pos_x, pos_y: pos_y).first
   end
 
+  def opposing_pieces(player_id)
+    pieces = player_id == white_player_id ? black_pieces : white_pieces
+    pieces.active
+  end
+
   private
 
   def create_white_pieces
