@@ -2,6 +2,7 @@
 class King < Piece
   def valid_move?(dest_x, dest_y)
     return false unless super(dest_x, dest_y)
+    return false if game.opponent_can_attack?(player_id, dest_x, dest_y)
     dx = dest_x - pos_x
     udx = dx.abs
     dy = dest_y - pos_y
@@ -19,8 +20,7 @@ class King < Piece
   end
 
   def in_check?
-    opponents = game.opposing_pieces(player_id)
-    opponents.any? { |piece| piece.valid_move?(pos_x, pos_y) }
+    game.opponent_can_attack?(player_id, pos_x, pos_y)
   end
 
   private

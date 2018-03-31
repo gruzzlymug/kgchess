@@ -81,9 +81,9 @@ class Game < ActiveRecord::Base
     pieces.where(pos_x: pos_x, pos_y: pos_y).first
   end
 
-  def opposing_pieces(player_id)
-    pieces = player_id == white_player_id ? black_pieces : white_pieces
-    pieces.active
+  def opponent_can_attack?(player_id, pos_x, pos_y)
+    opposing_pieces = player_id == white_player_id ? black_pieces : white_pieces
+    opposing_pieces.active.any? { |piece| piece.valid_move?(pos_x, pos_y) }
   end
 
   private
