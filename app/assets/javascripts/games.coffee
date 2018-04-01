@@ -43,8 +43,9 @@ drawGame = (game) ->
       p.pos_x = 7 - p.pos_x
       p.pos_y = 7 - p.pos_y
       p)
-  current_player_id = getPlayerId()
-  drawBoard(pieces, current_player_id)
+  playerId = getPlayerId()
+  isTurn = if game.turn % 2 == 0 then playerColor == 'white' else playerColor == 'black'
+  drawBoard(pieces, playerId, isTurn)
   movablePieces = $("div[draggable]")
   $.each(movablePieces, (i, o) -> o.ondragstart = dragStartHandler)
   updateTurn(game.turn)
@@ -52,32 +53,32 @@ drawGame = (game) ->
 getPlayerId = () ->
   cookies = document.cookie.split(';')
   pairs = cookies.map((c) => c.trim().split('='))
-  player_cookie = pairs.find((p) -> p[0] == 'player_id')
-  if player_cookie
-    return parseInt(player_cookie[1])
+  playerCookie = pairs.find((p) -> p[0] == 'player_id')
+  if playerCookie
+    return parseInt(playerCookie[1])
   else
     return 'player'
 
-colorizePieces = (pieces, white_id) ->
+colorizePieces = (pieces, whiteId) ->
   pieces.map((p) ->
-    p.player = if p.player_id == white_id then 'white' else 'black'
+    p.player = if p.player_id == whiteId then 'white' else 'black'
     p)
 
-drawBoard = (pieces, player_id) ->
+drawBoard = (pieces, playerId, isTurn) ->
   board = $('#board').get(0)
   rows = board.children
-  drawRow(i, row, pieces, player_id) for row, i in rows
+  drawRow(i, row, pieces, playerId, isTurn) for row, i in rows
 
-drawRow = (i, row, pieces, player_id) ->
+drawRow = (i, row, pieces, playerId, isTurn) ->
   # TODO: it is extra work clearing out every element in the row
   element.innerHTML = '&nbsp;' for element in row.children
-  row_pieces = $.grep(pieces, (p) -> p.pos_y == i)
-  drawPiece(piece, row.children[piece.pos_x], player_id) for piece in row_pieces
+  rowPieces = $.grep(pieces, (p) -> p.pos_y == i)
+  drawPiece(piece, row.children[piece.pos_x], playerId, isTurn) for piece in rowPieces
 
-drawPiece = (piece, element, player_id) ->
+drawPiece = (piece, element, playerId, isTurn) ->
   html = getPieceHtml(piece.type, piece.player)
   element.innerHTML = html
-  element.draggable = (piece.player_id == player_id)
+  element.draggable = isTurn && (piece.player_id == playerId)
   # this is accessed as .attributes['data-piece-id'] above
   element.dataset.pieceId = piece.id
 

@@ -69,7 +69,7 @@ class GamesController < ApplicationController
   def handle_move(game, params)
     pos_x = params[:col].to_i
     pos_y = params[:row].to_i
-    moved = game.move_selected_piece(current_player.id, pos_x, pos_y)
+    moved = game.move_selected_piece(pos_x, pos_y)
     if moved
       # TODO: scope messages to interested players/viewers
       GameChannel.broadcast_to('game_channel', pos_x: pos_x, pos_y: pos_y)
