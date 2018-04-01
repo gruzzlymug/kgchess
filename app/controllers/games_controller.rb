@@ -58,7 +58,7 @@ class GamesController < ApplicationController
       game.join(current_player.id)
     when 'select'
       piece_id = params[:pieceId]
-      game.select_piece(current_player.id, piece_id)
+      game.select_piece(piece_id)
     when 'move'
       handle_move(game, params)
     else

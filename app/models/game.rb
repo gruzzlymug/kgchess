@@ -54,20 +54,18 @@ class Game < ActiveRecord::Base
     (turn % 2).zero? ? white_player_id : black_player_id
   end
 
-  def select_piece(player_id, piece_id)
-    return false unless player_turn == player_id
-
-    selection = pieces.where(player_id: player_id, id: piece_id, status: 'true')
+  def select_piece(piece_id)
+    selection = pieces.find_by_id_and_status(piece_id, 'true')
     return false if selection.nil?
+    return false unless player_turn == selection.player_id
 
     update(selected_piece_id: piece_id)
     true
   end
 
-  def move_selected_piece(player_id, dest_x, dest_y)
-    return false unless player_turn == player_id
-
+  def move_selected_piece(dest_x, dest_y)
     return false if selected_piece.nil?
+    return false unless player_turn == selected_piece.player_id
     return false unless selected_piece.valid_move?(dest_x, dest_y)
 
     opponent = piece_at(dest_x, dest_y)
