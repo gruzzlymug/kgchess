@@ -2,7 +2,6 @@
 class King < Piece
   def valid_move?(dest_x, dest_y)
     return false unless super(dest_x, dest_y)
-    return false if game.opponent_can_attack?(player_id, dest_x, dest_y)
     dx = dest_x - pos_x
     udx = dx.abs
     dy = dest_y - pos_y
