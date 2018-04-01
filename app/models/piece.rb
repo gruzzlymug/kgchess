@@ -24,8 +24,8 @@ class Piece < ActiveRecord::Base
     return true unless blocker.nil? || blocker.opponent?(player_id)
 
     movement = move_type(dest_x, dest_y)
-    return false if movement == 'unchecked'
-    return false if movement == 'no_move'
+    return false if movement == :unchecked
+    return false if movement == :no_move
 
     path_obstructed?(movement, dest_x, dest_y)
   end
@@ -54,20 +54,20 @@ class Piece < ActiveRecord::Base
     udx = (dest_x - pos_x).abs
     udy = (dest_y - pos_y).abs
 
-    return 'no_move' if udx.zero? && udy.zero?
-    return 'vert' if udx.zero?
-    return 'horiz' if udy.zero?
-    return 'diag' if udx == udy
-    'unchecked'
+    return :no_move if udx.zero? && udy.zero?
+    return :vert if udx.zero?
+    return :horiz if udy.zero?
+    return :diag if udx == udy
+    :unchecked
   end
 
   def path_obstructed?(movement, dest_x, dest_y)
     case movement
-    when 'vert'
+    when :vert
       return vertically_obstructed?(dest_y)
-    when 'horiz'
+    when :horiz
       return horizontally_obstructed?(dest_x)
-    when 'diag'
+    when :diag
       return diagonally_obstructed?(dest_x, dest_y)
     end
 

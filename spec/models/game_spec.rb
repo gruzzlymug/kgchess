@@ -26,8 +26,8 @@ describe Game do
     it 'should be removed from the board' do
       rook = empty_game.add_white_piece('Rook', 3, 6)
       victim = empty_game.add_black_piece('Bishop', 3, 3)
-      empty_game.select_piece(rook.player_id, rook.id)
-      empty_game.move_selected_piece(rook.player_id, victim.pos_x, victim.pos_y)
+      empty_game.select_piece(rook.id)
+      empty_game.move_selected_piece(victim.pos_x, victim.pos_y)
       victim.reload
       expect(victim.pos_x).to be(nil)
       expect(victim.pos_y).to be(nil)
@@ -37,8 +37,8 @@ describe Game do
   it 'supports castle' do
     king = empty_game.add_white_piece('King', 4, 7)
     rook = empty_game.add_white_piece('Rook', 7, 7)
-    empty_game.select_piece(king.player_id, king.id)
-    empty_game.move_selected_piece(king.player_id, 6, 7)
+    empty_game.select_piece(king.id)
+    empty_game.move_selected_piece(6, 7)
     king.reload
     rook.reload
     expect(king.pos_x).to eq(6)
