@@ -54,6 +54,13 @@ class Game < ActiveRecord::Base
     (turn % 2).zero? ? white_player_id : black_player_id
   end
 
+  def valid_move?(piece_id, dest_x, dest_y)
+    piece = Piece.find(piece_id)
+    return false unless player_turn == piece.player.id
+    return false unless piece.valid_move?(dest_x, dest_y)
+    true
+  end
+
   def select_piece(piece_id)
     selection = pieces.find_by_id_and_status(piece_id, 'true')
     return false if selection.nil?
@@ -72,6 +79,10 @@ class Game < ActiveRecord::Base
     capture(opponent) unless opponent.nil?
 
     selected_piece.move_to(dest_x, dest_y)
+
+    king = pieces.where(player_id: selected_piece.player_id, type: 'King').first
+    puts "KING" if king.present? && king.in_check?
+
     true
   end
 

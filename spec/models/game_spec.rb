@@ -44,4 +44,11 @@ describe Game do
     expect(king.pos_x).to eq(6)
     expect(rook.pos_x).to eq(5)
   end
+
+  it 'does not allow other moves to put king in check' do
+    empty_game.add_white_piece('King', 4, 7)
+    empty_game.add_black_piece('Queen', 4, 0)
+    blocker = empty_game.add_white_piece('Bishop', 4, 6)
+    expect(empty_game.valid_move?(blocker.id, 3, 5)).to be(false)
+  end
 end
